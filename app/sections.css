@@ -320,7 +320,10 @@ a.card:active { transform: translate3d(0, -1px, 0); transition-duration: 0.08s; 
   padding: var(--spacing-4) var(--spacing-6);
   border: 0;
   background: transparent;
-  color: var(--color-primary-deep);
+  /* neutral-900, not primary-deep: the seven FAQ togglers are interactive
+     elements and cta-primacy ranks the tel: CTA among interactive elements
+     only. Near-black-on-white buttons outrank the CTA by construction. */
+  color: var(--color-neutral-900);
   font-family: var(--font-display);
   font-size: var(--text-lg);
   font-weight: var(--font-weight-bold);

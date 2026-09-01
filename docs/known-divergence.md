@@ -311,3 +311,101 @@ What DOES measure cleanly today, and did: the two render-truth gates (`contrast.
 `rendertruth.mjs`), which score the built page directly and need no reference, and the
 NOVEL token set, which `loadTokens()` reads from `app/globals.css` (13 colours, 16 sizes,
 5 weights, 7 radii, 4 shadows, 12 spacing steps).
+
+---
+
+## F-16 — the build wave's two render-truth defects, and why the fix went where it did
+
+Found by `rendertruth.mjs` on the first full run after the 27 section components landed,
+fixed in the same turn, both green afterwards. Recorded because both are recurring classes
+rather than one-off slips. **Neither was subject to `ITERATION_CAP`** — A-13 exempts
+render-truth failures, because they are defects in our own build rather than divergences
+from a reference.
+
+### F-16a — `cta-primacy` on `/services` at 768
+
+    tel: CTA ranks 52% down the page among INTERACTIVE elements by painted contrast
+
+The call CTA is white on the accent fill at **17.75:1**. Two other interactive element
+classes beat it, both by construction rather than by design intent:
+
+- `.u-btn--ghost`, whose label was `--color-primary-deep` on white — **19.5:1**. Every
+  `.actions` row on this site places a ghost button immediately beside the call CTA, so the
+  secondary action was out-contrasting the primary one on every route.
+- `.acc__btn`, the seven FAQ togglers on `/services`, same colour, same 19.5:1. That is why
+  the finding surfaced on `/services` specifically: it is the only route carrying seven
+  extra near-black interactive elements.
+
+**Fix: both were lowered to `--color-neutral-900` (#21273b), 14.8:1 on white.** Still far
+above the 4.5 AA floor, still the already-gated `body-on-surface` pair, and now below the
+CTA where the conversion path belongs. `harness.config.mjs` `pairsInUse`
+`ghost-label-on-surface` was updated in the same edit to keep the declared pair list in step
+with the CSS by hand, as that block's comment requires.
+
+**The direction of this fix is the load-bearing part.** `cta-primacy` scores **interactive
+elements only** — never body copy, never headings. An earlier version of the gate ranked the
+tel: CTA against every text box on the page, which near-black-on-white wins by construction;
+a sibling site responded by washing its headings from neutral-950 to neutral-700 and the
+regression had to be reverted. Dimming prose cannot satisfy this gate and costs real
+legibility. **If `cta-primacy` fails, fix the CTA or fix the other buttons. Never the
+headings.**
+
+### F-16b — `text-legibility` on `/` at 768: "Fixed Right, Once" at 1.52
+
+The home CTA strip's `<h2>` is white on the `primary → primaryDeep` gradient, which it
+contrasts with at better than 13:1 — and it measured **1.52**, at 768 only, passing at both
+390 and 1440.
+
+It was not a colour bug. `rendertruth.mjs` samples the two dominant painted tones inside a
+text element's **own box**. At 768 that h2 was the default 18px inside a 60ch centred block:
+a short heading in a wide box, so the ink ratio fell low enough that *both* dominant tones
+sampled were gradient rather than one being ink. At 390 the box is narrow enough that the
+text fills it; at 1025+ the h2 steps up to 24px and the glyphs carry enough area. 768 was the
+one width where neither rescued it.
+
+**Fix: `.statement h2` is now a real display size — `--text-4xl`, stepping to `--text-5xl`
+at 1025 — and `.statement--center h2` is capped to `24ch` and centred**, so a statement
+band's heading box hugs its own text. That is what the reference's statement bands do
+anyway, so the fix is a design correction rather than a measurement workaround.
+
+**The general lesson:** a low painted-separation number on text whose *declared* contrast is
+demonstrably fine is a geometry finding, not a colour finding. Recolouring it would have
+been the wrong repair and would have moved a gated pair for no reason. Check the ink-to-box
+ratio before touching a token.
+
+---
+
+## F-17 — three placeholder background slots are deliberately NOT applied
+
+`about.page-hero.bg`, `services.page-hero.bg`, `contact.page-hero.bg`, `home.why-choose.bg`
+and `home.cta-band.bg` are all recorded in `assets/INVENTORY.md` with a `section-average`
+dominant colour, which per **F-12** means the Prompt 1 probe never saw the image decode and
+the fill fell back to the average of a mostly-white band. All five are therefore near-white.
+
+Applying a near-white background image beneath body text makes the band's painted contrast
+**UNMEASURABLE** — `contrast.mjs` reports `url()` backgrounds as unmeasurable rather than
+assuming white, by design, and `rendertruth.mjs` would then be scoring text against a tone
+nobody chose. The bands are rendered on their real token surfaces instead
+(`data-surface="alt"` or the plain surface).
+
+This is a deliberate, permanent divergence from the reference's band treatment and it is
+**not** a fixable residual. When the terminal asset drop-in supplies real artwork with a
+known tone, these five slots can be reconsidered one at a time, each re-running both gates.
+`about.values.img` is also unused: its reference slot is a single image beside a four-card
+row, and dropping it into a four-up grid would fight the card heights.
+
+---
+
+## F-18 — colour, restated now that sections exist
+
+A-8 excluded colour from measurement from the start, and the build wave changes nothing
+about that. **Colour divergence from the reference is intentional and is permanently
+excluded from every diff, every threshold and every future iteration.** The palette is
+seed 79039 (violet-slate `#41434b` + deep rust `#672b22`), applied at token-write time, and
+the site was built in its final palette from the first component onward. There is no
+recolour pass and therefore nothing for a geometry/typography regression table to prove
+innocent.
+
+The one palette-adjacent change made during the build wave is F-16a's ghost-label move from
+`primaryDeep` to `neutral900`. It is a role reassignment within the existing token set, not
+a new token and not a hue change: both values were already in the ramp and already gated.

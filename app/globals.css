@@ -259,9 +259,22 @@ a[href^="tel:"] { min-height: 44px; }
 }
 .u-btn--call { background: var(--color-accent); color: var(--color-surface); }
 .u-btn--call:hover { background: var(--color-accent-deep); color: var(--color-surface); }
+/* The ghost button's label is neutral-900, NOT primary-deep, and the reason is
+   the cta-primacy gate rather than taste. rendertruth.mjs ranks the tel: CTA
+   among INTERACTIVE elements by PAINTED contrast, and it must lead them. The
+   call CTA is white on the accent fill at 17.75:1; a ghost button labelled in
+   primary-deep on white is 19.5:1 and outranks it, and every .actions row on
+   this site puts the two side by side. neutral-900 on white is 14.8:1 - still
+   far above the 4.5 AA floor, still the gated body-on-surface pair, and now
+   below the CTA where it belongs.
+
+   The fix is applied to the OTHER BUTTONS, never to headings or body copy.
+   Dimming headings to satisfy this gate is a known regression on a sibling
+   site: cta-primacy scores interactive elements only, so washing out prose
+   cannot help it and costs real legibility. */
 .u-btn--ghost {
   background: transparent;
-  color: var(--color-primary-deep);
+  color: var(--color-neutral-900);
   border-color: var(--color-border-strong);
 }
 .u-btn--ghost:hover { background: var(--color-neutral-200); }

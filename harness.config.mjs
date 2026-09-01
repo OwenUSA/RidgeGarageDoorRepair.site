@@ -174,7 +174,10 @@ export default {
     // mobile sticky call bar -- one token, gated once.
     { name: 'cta-label',              fg: 'neutral0',     bg: 'accent',      min: 4.5, kind: 'cta'  },
     { name: 'cta-label-hover',        fg: 'neutral0',     bg: 'accentDeep',  min: 4.5, kind: 'text' },
-    { name: 'ghost-label-on-surface', fg: 'primaryDeep',  bg: 'neutral0',    min: 4.5, kind: 'text' },
+    // neutral900, not primaryDeep: the ghost label was lowered so the call CTA
+    // leads on painted contrast among INTERACTIVE elements (rendertruth cta-primacy).
+    // Kept in step with app/globals.css .u-btn--ghost by hand.
+    { name: 'ghost-label-on-surface', fg: 'neutral900',   bg: 'neutral0',    min: 4.5, kind: 'text' },
     { name: 'ghost-edge-on-surface',  fg: 'borderStrong', bg: 'neutral0',    min: 3,   kind: 'ui'   },
     { name: 'ghost-label-on-dark',    fg: 'neutral0',     bg: 'primary',     min: 4.5, kind: 'text' },
     { name: 'ghost-edge-on-dark',     fg: 'neutral0',     bg: 'primary',     min: 3,   kind: 'ui'   },

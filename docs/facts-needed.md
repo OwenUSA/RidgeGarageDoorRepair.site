@@ -51,3 +51,27 @@ Recorded so a later turn does not "notice the gap" and fill it:
 | 26 city/neighbourhood pages and a service-area grid | the one `SERVICE_AREA` sentence | D-02. |
 
 **Current open `TODO(fact)` count: 15.** Prompt 11 reports it.
+
+---
+
+## Confirmed at the Prompt 6+7 build wave — every marker SHIPS VISIBLY
+
+The sections are now built, so each marker below is no longer a plan: it is rendered text a
+visitor would read. That visibility is the point. A marker that is styled to disappear is
+the same failure as inventing the fact, because nobody is prompted to supply it.
+
+| id | where it now renders | what a reader sees |
+|---|---|---|
+| FACT-01/02/03/13 | `/` `home.trust-strip` | three `.factchip` boxes at the reference's own 100px badge height, each carrying its literal `TODO(fact): licence` / `insurance` / `affiliation` label and its explanatory note. The row is deliberately built and deliberately empty. |
+| FACT-05/15 | `/` `home.testimonials-head` | three `.tphold` cards, each headed with the literal string `[TESTIMONIAL PLACEHOLDER]` above decorative grey bars. **No customer name, no quote, no star rating, no review count, and no `AggregateRating` or `Review` JSON-LD anywhere on the site** — verified by sweep. |
+| FACT-06/07/14 | `/about` `about.story` | two of the section's three paragraphs are full `TODO(fact):` markers at the length of the paragraph they will replace. No founding year, no founder, no headcount, and no "our experienced team" hedge substituted for them. |
+| FACT-04/08 | `/` `home.why-choose`, `/about` `about.values` | both sections were written to make a virtue of carrying no credential. `home.why-choose` opens by saying there is no certificate and no job count on the page *because* neither could be verified. Nothing was added to either. |
+| FACT-09 | shell header and footer | the wordmark is set in the display font. No logo file exists. |
+| FACT-10/11/12 | all five routes | no response time, no arrival window, no warranty term, no service radius in miles. The proposition is transparency and it never smuggles a speed claim; the only geographic statement anywhere is the single `SERVICE_AREA` sentence. |
+
+**Nothing was invented to fill a slot during the build wave, and the count is unchanged at
+15.** Two facts were checked for specifically because they are the ones a build tends to
+invent under layout pressure — a founding year to fill a story column, and a badge to fill
+a badge row — and both shipped as markers.
+
+`docs/PRE-LAUNCH.md` section 5 carries the same list as a pre-public blocker.
