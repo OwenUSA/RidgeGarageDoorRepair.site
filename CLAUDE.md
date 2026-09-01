@@ -384,3 +384,91 @@ run the trimmed acceptance gates in the same turn.
   Rejected: `process.md` names it as the failure mode to watch for, and the Prompt 1
   harness bug — where every section silently defaulted to FIDELITY — proved the
   classification is load-bearing. It buys speed by making the measurement lie.
+
+### A-11 — the harness is SHARED; this site consumes it, it does not own one
+
+Five sites independently wrote five harnesses against the same spec. Measured line overlap
+was **3–8%, and every shared line was boilerplate** (`import { chromium }`, viewport
+literals) — zero shared domain logic. The instrument is measurement plumbing: it is
+identical for every site and invisible in the product, so rebuilding it per site bought
+nothing and cost roughly 500k tokens across the programme.
+
+**Governing rule: share the instrument, never the output.** Tokens, palette seed, copy,
+section order and layout are still derived per-site from this site's own reference URL, so
+the sites stay genuinely different. Only the measuring apparatus is common.
+
+The package lives at `../_shared/harness`, configured by `./harness.config.mjs` at this
+site's root. Run every gate with the SITE ROOT as cwd:
+
+```bash
+MSYS_NO_PATHCONV=1 node ../_shared/harness/src/diff.mjs        [--route /about] [--bp 1440]
+MSYS_NO_PATHCONV=1 node ../_shared/harness/src/contrast.mjs    [--route /about] [--bp 1440]
+MSYS_NO_PATHCONV=1 node ../_shared/harness/src/rendertruth.mjs [--route /about] [--bp 390]
+```
+
+`MSYS_NO_PATHCONV=1` is required in Git Bash: a bare `/` route argument is otherwise
+rewritten into a Windows path. Two further traps, both of which have already bitten:
+
+- **Never background the dev server with `&` in the same command chain as a gate run.** It
+  drops the rest of the chain back to the original cwd, `loadConfig()` then reads a
+  *different site's* config, and the gate silently reports another site's numbers.
+  Verify identity with `curl -s localhost:<PORT>/ | grep '<title>'` before trusting output.
+- Any legacy `scripts/harness/` or `harness/` directory in this repo is **superseded**. Do
+  not run it, do not extend it.
+
+Seven instrument defects found the expensive way are now locked behind executable
+assertions in `_shared/harness/test/selftest.mjs`. They previously survived only as inline
+comments. Run `node test/selftest.mjs` in the package if you touch it.
+
+### A-12 — the comparator splits BLOCKING from ADVISORY
+
+`innerCount`, `innerRows`, `innerCols` and `position` are **ADVISORY**: computed and
+reported as a trailing per-row note, never contributing to the deviation %, never failing a
+row.
+
+They compare our clean markup against a page-builder's nested column tree and are
+**unclosable by construction**. On the Atlas site they were 94/82/81 of every residual and
+drowned the real defects underneath. Do not chase them, and do not restructure markup to
+imitate the builder's nesting.
+
+BLOCKING fields remain: box geometry, type scale, weights, letter-spacing, line-height,
+spacing rhythm, and border/shadow/radius geometry. Colour stays excluded entirely (A-8).
+
+### A-13 — render-truth gates are BLOCKING and are NOT subject to `ITERATION_CAP`
+
+`ITERATION_CAP = 1` governs **structural residuals only**. A render-truth failure is a
+defect, not a divergence from the reference — fix it, however many attempts that takes.
+
+Two gates, which fail independently because one reasons about declared CSS and the other
+about painted pixels:
+
+- **`contrast.mjs`** — gradient-aware WCAG AA. Resolves backgrounds as an ordered layer
+  stack; treats `background-image` as a real background and parses its gradient stops;
+  scores the **worst sample along the ramp**; reports `UNMEASURABLE` for `url()` or
+  translucent overlays rather than assuming white.
+- **`rendertruth.mjs`** — pixel-level. Screenshots each text box and measures the contrast
+  between its dominant painted tones; checks that the `tel:` CTA leads the page on painted
+  contrast; enforces WCAG 2.5.8 tap targets at the smallest breakpoint.
+
+**Why these exist.** Atlas completed this entire chain and shipped with its primary call
+CTA invisible — label painted in *exactly* its own background colour, 1:1 — on all five
+routes, while its acceptance sweep reported "23/23 pairs pass AA". Every check in that
+chain trusted the same declared values, so one blind spot took the whole audit down.
+Forge's frozen shell carried the same class of bug (a 1.16:1 secondary CTA on all five
+routes), caught before its build wave rather than after.
+
+Both gates must read **0 FAIL / 0 findings** before any "done" report.
+
+### A-14 — one rule that prevents a whole defect class
+
+Every `tel:` link is a primary conversion target on a phone-driven site, so give them all
+the WCAG 2.5.8 minimum in one place rather than per component:
+
+```css
+a[href^="tel:"] { min-height: 44px; }
+```
+
+Chased class-by-class this recurred three times in Forge's shell alone and would have
+recurred again in section builds. `min-height` is inert on a purely inline box, so tel
+links inside prose keep their natural metrics and the type scale the diff measures is
+untouched.
