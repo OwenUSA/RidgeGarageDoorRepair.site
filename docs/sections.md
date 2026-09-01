@@ -8,9 +8,14 @@ list (`harness/bands.mjs`), which is stable post-hydration.
 Classes: **FIDELITY** pixel diff `< 2%` · **ADAPTED** structural deviation `< 5%` ·
 **NOVEL** token violations `= 0` · **DELETED** not built.
 
-> **Draft status.** This is the Prompt 1 draft. Prompt 3 reclassifies any section whose
-> *information content* changes and names the reordering there. It does not get to
-> reclassify to dodge a hard fix.
+> **Status: reconciled at Prompt 3 (merged 2+3+4 turn).** The copy exists, the lexical and
+> length gates pass, and every section below has been checked against the content that will
+> fill it. The reordering, the two drops, the two additions and the symptom regrouping are
+> named in `docs/content-divergence.md`; this file carries the classes.
+>
+> **No section changed class in that pass, because there were no FIDELITY sections to
+> migrate** — see the headline finding immediately below, which was already true at
+> Prompt 1. What *did* change is recorded in "Prompt 3 amendments" at the foot of this file.
 
 ---
 
@@ -78,9 +83,10 @@ Six reference bands deleted or moved, two novel sections added.
 |---|---|---|---|---|
 | 0 | `shell.header` | 0 | ADAPTED | shared shell |
 | 1 | `services.page-hero` | 1 | ADAPTED | Page-title band. |
-| 2 | `services.list` | 2 | ADAPTED | The eight services, in-page anchors, each linking `tel:` and `/contact`. No per-service routes (D-01), no prices (D-12). |
+| 2 | `services.list` | 2 | ADAPTED | **Heading and intro paragraph only** — that is all the reference band is (one h2 of 53 chars plus one 164-char paragraph; their services live on their home page). Paired slot, measured at ±10%, currently −6.4%. |
 | 3 | `services.cta-band` | 3 | ADAPTED | Closing CTA. |
 | 4 | `shell.footer` | 4 | ADAPTED | shared shell |
+| — | `services.symptoms` | — | **NOVEL** | The eight services in the four symptom groups, in-page anchors, each linking `tel:` and `/contact`. No per-service routes (D-01), no prices (D-12). **Split out of `services.list` at Prompt 3** — see the amendments below. No reference counterpart at any position, so token conformance, not pixels. |
 | — | `services.faq` | — | **NOVEL** | The FAQ moved off the home page. Generic garage-door technical content only — nothing about response time, pricing, warranty or credentials. No reference counterpart at this position, so token conformance, not pixels. |
 
 ## `/contact` (reference `/contact-us/`, 5 bands)
@@ -129,10 +135,49 @@ Also deleted and not replaced: the blog (`/what-to-do-after…`, `/winter-roofin
 |---|---:|---:|---:|---:|
 | `/` | 14 | 2 | 5 | 16 |
 | `/about` | 6 | 0 | 0 | 6 |
-| `/services` | 5 | 1 | 0 | 6 |
+| `/services` | 5 | 2 | 0 | 7 |
 | `/contact` | 5 | 0 | 0 | 5 |
 | `/privacy` | 2 | 1 | 0 | 3 |
-| **total** | **32** | **4** | **5** | **36** |
+| **total** | **32** | **5** | **5** | **37** |
 
 `shell.header` and `shell.footer` appear on all five routes; they are one lead-owned
 implementation measured five times.
+
+---
+
+## Prompt 3 amendments — what moved, and what did not
+
+Full reasoning in `docs/content-divergence.md`. Recorded here because this file is the
+source of truth downstream.
+
+**Classification changes: none.** There were no FIDELITY sections at Prompt 1 and there are
+none now. The FIDELITY → ADAPTED migration this prompt exists to force had already happened.
+
+**Structure changes, three:**
+
+1. **`services.list` narrowed to heading + intro.** The reference `/services` band 2 is 218
+   characters total. Loading eight services and four symptom headings into it would have
+   missed the ±10% length gate by roughly 600%, and the only ways out would have been a
+   fourth length exemption or a class change — both of which are the failure mode
+   `CLAUDE.md` names by name. The band keeps its honest paired measurement instead.
+2. **`services.symptoms` added as NOVEL.** The eight services live here. It is measured on
+   token conformance at zero violations, once, at 1440 (F-08 / A-9).
+3. **Two structures confirmed against the reference's own heading and paragraph counts,
+   with no class change:** `home.commitment` is h2 + three h4 cards + a closing paragraph;
+   `home.why-choose` is one h2 + an intro paragraph + four reason paragraphs (**not** four
+   headed cards — the Prompt 1 draft called it a "4-card reasons block").
+
+**Render order is NOT reference order.** Five home sections move by more than one position
+(`home.services-grid`, `home.about-teaser`, `home.components-grid`, `home.trust-strip`,
+`home.testimonials-head`), and two NOVEL bands are interleaved at positions 2 and 4. The
+`refSection` column above is the pairing identity and is unaffected by render order.
+
+This is safe to measure because **A-12 makes `position` ADVISORY** — it is computed and
+reported per row but never contributes to the deviation percentage. Reordering cannot
+inflate a structural residual.
+
+**Copy pairing.** `content/copy.ts` carries a `refSection` of the form `sNN-slug` on every
+section, where `NN` is the reference band index in the tables above. That string is what
+`similarity.mjs` pairs on. **If a row in this file changes its `ref band`, the matching
+`refSection` in `content/copy.ts` must change with it** — the two are a machine twin pair
+and are the one place this file can silently drift.

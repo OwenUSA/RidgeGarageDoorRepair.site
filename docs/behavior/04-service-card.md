@@ -58,7 +58,15 @@ card, or a fast diagonal sweep leaves a trail of half-lifted cards.
 ## trigger
 
 Pointer enter/leave; `:active` on press; `:focus-visible` mirrors the hover state exactly so
-keyboard users see the same affordance. Not repeating, no route-change concerns.
+keyboard users see the same affordance. Not repeating.
+
+**Client-side route change:** nothing to do, and nothing to guard against, because the whole
+behavior is CSS pseudo-class state on the element. It cannot survive a navigation, because
+the element does not. This is stated rather than omitted because it is the reason the effect
+must **not** be reimplemented as a React `hover` state — a `useState(true)` left set by a
+pointer that leaves during a navigation is a card stuck lifted on the next page, and that is
+the exact bug the CSS version cannot have. There is also **no scroll-linked entrance** on
+these cards; see `08-scroll-reveal.md` for why a stagger here would fight this spec.
 
 ## accessibility
 

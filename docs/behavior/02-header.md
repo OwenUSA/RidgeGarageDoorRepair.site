@@ -55,3 +55,8 @@ a separate element with its own spec (`03-mobile-call-bar.md`), not a header sta
   `aria-current="page"`.
 - Because the header is static, focus never lands behind a floating bar — the class of bug
   a sticky header introduces and then has to fix with `scroll-margin-top`.
+- **`prefers-reduced-motion` has nothing to do here, and that is deliberate.** The header
+  itself never animates; the only motion it owns belongs to the drawer toggle, whose
+  reduced-motion clause lives in `01-mobile-nav-drawer.md`. If a future change gives the
+  header any transition of its own, that change must add the media query at the same time —
+  D-19 is per-animation, not per-file. See `08-scroll-reveal.md` for the site-wide baseline.

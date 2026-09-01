@@ -81,6 +81,85 @@ Token conformance has no breakpoint dimension. NOVEL rows are measured once at 1
 `BP_SET` is unchanged: all three breakpoints stay measured for everything geometric,
 including 768, where the primary restack resolves.
 
+## F-10 — the reference is now behind a bot wall; its capture is FROZEN
+
+Between Prompt 1 and the merged Prompt 2+3+4 turn, `costarroofinginc.com` acquired a
+JavaScript interstitial: `<title>One moment, please…</title>`, 51 characters of body text, a
+5-second self-reload. Prompt 1 recorded HTTP 200 headless on the first try for every page;
+that is no longer true.
+
+**What was tried, in the order `CLAUDE.md` specifies:** headless via
+`_shared/harness/src/refcopy.mjs` (returned 2 sections / 51 chars for all five pages), then
+one headed retry with a real Chrome UA at 1440, polled eight times at 6-second intervals.
+The wall never cleared. The contract's third branch — *fall back to profiling a local saved
+copy* — is therefore the operating mode from here.
+
+**The local saved copy is the Prompt 1 capture**, taken while the site was still open:
+
+- `.harness/text/*.json` — headings, paragraphs and character counts per band
+- `.harness/assets/*.json` — every asset slot's rendered geometry per breakpoint
+- `.harness/ref/<route>/<bp>/*.png` — reference section screenshots, all three breakpoints
+- `.harness/profile/*.json` — computed styles, font faces, media queries, motion probes
+
+`.harness/refcopy.json` is **reconstructed** from `.harness/text/*.json` by
+`scripts/refcopy-from-capture.mjs`, in the shape `similarity.mjs` expects. One honest
+caveat: its `text` field is `headings + paragraphs`, so `chars` counts body and heading text
+and excludes button labels and stray nodes that the live extractor's `el.textContent` would
+have included. Every length target in `docs/content-divergence.md` is against that
+reconstruction, and the reconstruction cannot now be checked against the live page.
+
+**Consequences, all of them permanent:**
+
+1. **No reference number in this repo can be re-measured.** Treat the captures as the
+   specification. Prompt 11's structural comparator runs against them, not against the live
+   site, and it must not be "refreshed".
+2. **`--side ref` capture is dead.** Any harness pass that would re-fetch the reference will
+   return the wall. If a gate reports a reference height of ~104px or a section count of 2,
+   that is the wall, not a regression in our build.
+3. **This is not a defect and no iteration is ever spent on it.**
+
+## F-11 — no font floor, and the phantom face is named
+
+The Prompt 2 enumeration confirmed F-01 rather than overturning it, and it also found the
+trap another site in this programme fell into.
+
+`.harness/profile/_.json → fontFaces` is the live `document.fonts` set post-hydration. A
+`FontFace` reaches `status: "loaded"` only once its `src` has been fetched and parsed, so
+`loaded` is proof a real file is served:
+
+| family | declared | loaded | verdict |
+|---|---:|---:|---|
+| Inter | 135 | 4 | real — body face |
+| Mulish | 88 | 4 | real — display face |
+| Poppins | 39 | 3 | real, but a few widget nodes only |
+| **Outfit** | 27 | **0** | **phantom — declared, never loaded, never rendered** |
+| `elementskit` / `ElegantIcons` | 5 | 2 | real — icon fonts |
+
+- **Mulish and Inter get NO floor.** Both are SIL OFL, served from Elementor's local
+  Google Fonts cache, and both are imported directly via `next/font/google`. Heading metrics
+  are expected to **converge** and must never be excused. The h1 (Mulish 800, −2px tracking)
+  is the most visually load-bearing element on the site.
+- **Outfit gets NO floor either, and no import.** Zero loaded faces and it appears in no
+  computed `font-family` on any node at any breakpoint. It is dead plugin CSS. Booking a
+  substitution floor for it would permanently excuse nothing at all while looking like
+  diligence — which is precisely the failure the other site shipped.
+- Icon fonts remain the only genuine replacement, → `lucide-react`. **Glyph shape is a
+  floor; box and stroke weight are not** (F-01).
+
+Full table and reasoning: `assets/INVENTORY.md` → "Fonts".
+
+## F-12 — placeholder fills sampled from a section average are weak, and are labelled
+
+`scripts/inventory.mjs` prefers the Prompt 1 per-slot colour crop. Where that recorded
+`null` (the image had not decoded when the probe ran) it falls back to the average of the
+whole reference section, which on a mostly-white band returns near-white — so those
+placeholders read faintly. Seven of the eighteen REPLACE slots are on that path and every
+one is tagged `section-average` rather than `slot-crop` in `assets/INVENTORY.md`.
+
+Not worth an iteration: the hairline border and the slot-ID label keep the box visible, and
+every one of these is replaced outright at the terminal asset drop-in (OVERRIDE 3). Recorded
+so nobody reads a pale hero placeholder as a token bug.
+
 ## F-09 — ITERATION_CAP is 1 (A-2)
 
 One fix attempt per section. On the first miss the residual and a hypothesis are written

@@ -68,3 +68,11 @@ change the component remounts with the new `zoom` and the browser re-defers.
   an icon alone.
 - The iframe is not focusable content the page depends on; nothing inside it is required to
   complete any task.
+- **`prefers-reduced-motion: reduce` — nothing of ours animates here, and the wrapper must
+  not acquire a fade-in.** The reserved aspect-ratio box is painted at full opacity from
+  first paint and the iframe simply arrives inside it. A "graceful" fade on load would be a
+  scroll-position-dependent animation on a full-width band, which `08-scroll-reveal.md`
+  rules out, and it would make the map's captured state depend on how fast the frame
+  resolved. Google's own map tiles animate inside the frame; that is theirs, it is not
+  reachable from our stylesheet, and it is recorded as out of our control rather than
+  treated as a defect.
