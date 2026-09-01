@@ -472,3 +472,48 @@ Chased class-by-class this recurred three times in Forge's shell alone and would
 recurred again in section builds. `min-height` is inert on a purely inline box, so tel
 links inside prose keep their natural metrics and the type scale the diff measures is
 untouched.
+
+### A-15 — the reference is GONE; structural comparison is permanently BLOCKED here
+
+The live reference now answers every request — headless, headed, normal desktop UA — with
+a bot-challenge interstitial (`<title>One moment, please...</title>`, ~7-12 KB of body).
+Verified directly, not inferred. Three of the five sites in this programme are affected.
+
+This site has **no usable saved copy of the reference**, so no reference-side capture can
+ever be produced again. Do not spend budget attempting it, and do not write a converter
+that back-fills the missing metric fields from the Prompt 1 legacy capture: those fields
+would be invented, and invented numbers that look like measurements are worse than no
+measurement, because the next reader cannot tell the difference.
+
+**What is unaffected**, because it was extracted while the reference was reachable and is
+already committed:
+
+- the token set, type scale, spacing scale and container widths (Prompt 1 capture)
+- the section contract and its classifications (`docs/sections.md`)
+- all copy, and both similarity gates, which score against the saved reference corpus
+- the applied palette, which is derived from the extracted ramp
+
+So the design system here is still genuinely reference-derived. What is lost is the ability
+to *verify* fidelity against the reference, not the derivation itself.
+
+**Blocking gates for this site are therefore:**
+
+| gate | status |
+|---|---|
+| `contrast.mjs` — gradient-aware AA | BLOCKING, 0 FAIL |
+| `rendertruth.mjs` — legibility, CTA primacy, tap targets | BLOCKING, 0 findings |
+| token conformance (NOVEL sections) | BLOCKING, 0 violations |
+| `pnpm build`, email sweep, locations sweep, NAP, link crawl | BLOCKING |
+| **structural deviation vs the reference** | **BLOCKED — no reference side exists** |
+
+Every structural row reports `BLOCKED/no-reference`, never a number and never a PASS.
+A BLOCKED row is not a pass; it is an absence, and it must read as one in every report.
+
+`docs/PRE-LAUNCH.md` carries this as a pre-public blocker in these words: **"never
+measured against its reference — the reference became unreachable mid-build and no local
+copy was kept."**
+
+Worth recording for future runs: the cheap preventative is to save a complete local copy of
+every reference page at Prompt 1, while it is still reachable, rather than assuming it will
+still be there at Prompt 6. One site in this programme did exactly that and kept full
+structural measurement after its reference was walled.
