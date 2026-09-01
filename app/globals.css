@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Prompt 5 replaces this with the extracted token set. Prompt 1 ships the bare
+   minimum needed to prove the harness runs against a real scaffold. */
+@theme {
+  --color-ink: #27282a;
+  --color-body: #696969;
+}

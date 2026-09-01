@@ -29,8 +29,8 @@ MAP_COORDS         = 35.5067,-97.7625
 HOURS              = 7 days, 7:00 AM – 7:00 PM
 SERVICE_AREA       = Serving Yukon and the west Oklahoma City metro.
 
-MAX_AGENTS         = 2     hard concurrency cap
-ITERATION_CAP      = 3     attempts per section, then it is floored and reported
+MAX_AGENTS         = 4             hard concurrency cap (amended, was 2)
+ITERATION_CAP      = 1             ONE fix attempt per section, then floored and logged (amended, was 3)
 BP_SET             = 390, 768, 1440   exactly three
 ```
 
@@ -205,8 +205,8 @@ work yourself in the main thread. When in doubt, serial.
   unexplained after one code-level attempt, one image at a time, cropped to the section.
 - Three breakpoints, `BP_SET`, fixed. Do not add a fourth because the reference CSS has
   one; note it in `docs/profile.md` instead.
-- `ITERATION_CAP` attempts per section. On the third failure, stop, write the residual and
-  your best hypothesis to `docs/known-divergence.md`, and move on. Never a fourth.
+- `ITERATION_CAP` attempts per section — now **one**. On the first miss, stop, write the
+  residual and your best hypothesis to `docs/known-divergence.md`, and move on. Never a second.
 - Subagents return the report table and nothing else. No transcripts, no file contents,
   no narration of what they tried.
 - Re-diff only the sections you touched. Full sweeps happen at the end of a prompt, once.
@@ -248,3 +248,139 @@ route | section | breakpoint | class | metric | value | threshold | status
 
 Plus: what changed, what regressed, what is newly blocked, and the next batch you are
 dispatching. No prose summary in place of the table.
+
+---
+
+## CHAIN AMENDMENTS — issued mid-run
+
+The chain was compressed. **These override both `process.md` and anything earlier in this
+file.** They are written here so they survive a context reset.
+
+### A-1 — `MAX_AGENTS` 2 → 4
+
+The hard cap moved; it is still hard. **Never exceed 4 concurrent agents, never ask to.**
+
+### A-2 — `ITERATION_CAP` 3 → 1
+
+A section gets **one** fix attempt. On the first miss it is floored: write the residual and
+your best hypothesis to `docs/known-divergence.md` and move on. **Never a second attempt.**
+Measure once, log it, move on.
+
+### A-3 — Prompt 8 is DROPPED as a separate turn
+
+There is no convergence loop. Its behavior folds into the build wave: **each section is
+diffed as it is built, gets one fix attempt, then is floored and logged.** The only full
+sweep in the whole run is the one in Prompt 11.
+
+### A-4 — Prompt 11 is TRIMMED
+
+**Dropped entirely — do not run, do not substitute anything for them:**
+
+- Gate 12, Lighthouse on all five routes.
+- The manual keyboard-only pass in gate 8.
+
+Both become pre-public blockers in `docs/PRE-LAUNCH.md`, worded as *"performance never
+measured"* and *"keyboard access is spec-verified only, never hand-tested"*.
+
+**Every other gate stands**, explicitly including: `pnpm build` clean, the email sweep, the
+locations sweep, NAP consistency, hours, both maps, the internal link crawl, the
+programmatic contrast audit, reduced-motion, palette conformance and the winning seed, the
+`scripts/similarity.mjs` re-run, metadata/robots/sitemap, and the `TODO(fact)` count.
+
+### A-5 — Subagent model policy
+
+**Dispatch every section-builder and route-builder subagent on Sonnet.** The lead stays on
+Opus and keeps all reasoning-heavy work and every shared-file edit in the main thread.
+Four concurrent Opus agents re-trips the session rate limit.
+
+### A-6 — Parallelism guardrails at 4-wide
+
+These were theoretical at 2-wide and are real at 4-wide:
+
+- **The shell is frozen after Prompt 5.** No section agent touches `globals.css`,
+  `layout.tsx`, tokens, header, footer, nav, the NAP block, or `<BusinessMap>`. An agent
+  that needs a shared change **stops and hands it back**; the lead makes the edit once in
+  the main thread, then re-dispatches.
+- **No section agent introduces a token that is not in Prompt 5's set.** It comes back to
+  the lead or it does not happen.
+- The lead still builds the hero and the map section personally.
+
+### A-7 — Prompt 9 folds into Prompt 5
+
+OVERRIDE 1 already made the palette selection autonomous, so the contact sheet renders for
+an audience of nobody. The palette is therefore randomized **at token-write time**, in
+Prompt 5. The site is built in its final palette from the first component onward. **No
+recolor pass, no candidate crop renders, no contact sheet, no geometry/typography
+regression table** — there is no recolor for a regression table to prove innocent.
+
+What survives from Prompt 9, unchanged: OKLCH conversion holding every L and C exactly;
+re-derivation from a new random primary hue; accent by one randomly-selected scheme
+(complementary, split-complementary, analogous, triadic); neutrals keeping a 3–6% chroma
+tint; `scripts/palette.mjs --seed <n>` reproducing exactly; **five candidates still
+generated and still gated programmatically** (OKLCH math plus contrast checks is nearly
+free without the crop renders); auto-select the survivor whose call-now CTA has the highest
+contrast against its background, ties to the lowest seed; and the winning seed plus all
+five candidate seeds recorded in `docs/known-divergence.md`.
+
+Hard constraints, verified programmatically before a candidate survives: every
+foreground/background pair **actually in use** passes WCAG AA (text 4.5:1, large text and
+UI borders 3:1); the call-now CTA remains the highest-contrast, highest-chroma element on
+every page; semantic colors (form error, form success, focus ring) are **exempt** from
+rotation and keep conventional hues — a randomly green error state is a bug; focus rings
+keep 3:1 against both the element and its background.
+
+### A-8 — Color is excluded from measurement FROM THE START
+
+Load-bearing, do not skip. The structural comparator scores resolved colors as one of its
+fields. Now that the recolor happens at token-write time rather than after convergence,
+every ADAPTED section would otherwise carry a permanent color delta into
+`STRUCT_THRESHOLD` from its very first measurement and eat the budget before geometry gets
+a look in.
+
+**Strip color-valued fields from the structural comparator**: resolved color,
+background-color, border-color, gradient stops, shadow color. Keep every geometric and
+typographic field, and keep the non-color parts of borders and shadows (widths, offsets,
+blur, spread, radii). Any FIDELITY section that is a solid-color band will read 100%
+divergent forever once recolored — exclude it from pixel diff and measure it structurally,
+or floor it explicitly, but say which and write it in `docs/known-divergence.md`.
+
+Record there: **color divergence from the reference is intentional and permanently excluded
+from every diff, every threshold, and every future iteration.**
+
+### A-9 — NOVEL and DELETED rows are measured once, not per breakpoint
+
+Token conformance has no breakpoint dimension; measuring a NOVEL section at three widths is
+the same check run three times. Collapse NOVEL and DELETED rows to a single pass in the
+harness and in the reports.
+
+**`BP_SET` does not change.** All three breakpoints stay measured for everything geometric.
+768 is where the primary restack resolves and it is the band most likely to hide a real
+bug — it stays.
+
+### A-10 — Prompt 10 folds into Prompt 11
+
+Asset-prompt writing is pure text and has no dependency on the acceptance sweep. It needs
+the applied palette hues, which now exist from Prompt 5. Write `docs/asset-prompts.md` and
+run the trimmed acceptance gates in the same turn.
+
+### Resulting turn structure
+
+```
+0  CLAUDE.md
+1  profile + harness
+2+3+4   assets, copy and divergence gates, behavior specs
+5+9     tokens, randomized palette, shared shell
+6+7     lead builds hero + map, then ONE 4-wide wave over home sections + four subpages
+10+11   asset prompts, then the trimmed acceptance sweep
+```
+
+### Not adopted, deliberately
+
+- **Measuring at two breakpoints instead of three.** Rejected: the tablet band is where the
+  restack resolves, and with `ITERATION_CAP` at 1 there is no second pass to catch what it
+  hides. It buys a third of measurement time by making the measurement blind exactly where
+  the clone is hard.
+- **Reclassifying borderline sections FIDELITY → ADAPTED to avoid pixel diffing.**
+  Rejected: `process.md` names it as the failure mode to watch for, and the Prompt 1
+  harness bug — where every section silently defaulted to FIDELITY — proved the
+  classification is load-bearing. It buys speed by making the measurement lie.

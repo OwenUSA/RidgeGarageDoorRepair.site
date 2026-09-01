@@ -1,0 +1,66 @@
+{
+  "_comment": "Machine-readable twin of docs/sections.md. refIndex is the 0-based index into the reference page's outermost band list (same ordering profile.mjs uses). class drives which metric diff.mjs applies. Sections with refIndex null are NOVEL. DELETED bands are listed in docs/sections.md only.",
+  "routes": {
+    "/": {
+      "refUrl": "https://costarroofinginc.com/",
+      "sections": [
+        { "id": "shell.header", "refIndex": 0, "class": "ADAPTED" },
+        { "id": "home.hero", "refIndex": 1, "class": "ADAPTED" },
+        { "id": "home.trust-strip", "refIndex": 2, "class": "ADAPTED" },
+        { "id": "home.about-teaser", "refIndex": 3, "class": "ADAPTED" },
+        { "id": "home.testimonials-head", "refIndex": 4, "class": "ADAPTED" },
+        { "id": "home.services-grid", "refIndex": 5, "class": "ADAPTED" },
+        { "id": "home.expertise-band", "refIndex": 6, "class": "ADAPTED" },
+        { "id": "home.commitment", "refIndex": 7, "class": "ADAPTED" },
+        { "id": "home.performance-band", "refIndex": 8, "class": "ADAPTED" },
+        { "id": "home.components-grid", "refIndex": 9, "class": "ADAPTED" },
+        { "id": "home.why-choose", "refIndex": 11, "class": "ADAPTED" },
+        { "id": "home.cta-band", "refIndex": 15, "class": "ADAPTED" },
+        { "id": "home.map", "refIndex": 16, "class": "ADAPTED" },
+        { "id": "shell.footer", "refIndex": 17, "class": "ADAPTED" },
+        { "id": "home.process", "refIndex": null, "class": "NOVEL" },
+        { "id": "home.transparency", "refIndex": null, "class": "NOVEL" }
+      ]
+    },
+    "/about": {
+      "refUrl": "https://costarroofinginc.com/about-us/",
+      "sections": [
+        { "id": "shell.header", "refIndex": 0, "class": "ADAPTED" },
+        { "id": "about.page-hero", "refIndex": 1, "class": "ADAPTED" },
+        { "id": "about.story", "refIndex": 2, "class": "ADAPTED" },
+        { "id": "about.values", "refIndex": 3, "class": "ADAPTED" },
+        { "id": "about.cta-band", "refIndex": 4, "class": "ADAPTED" },
+        { "id": "shell.footer", "refIndex": 5, "class": "ADAPTED" }
+      ]
+    },
+    "/services": {
+      "refUrl": "https://costarroofinginc.com/services/",
+      "sections": [
+        { "id": "shell.header", "refIndex": 0, "class": "ADAPTED" },
+        { "id": "services.page-hero", "refIndex": 1, "class": "ADAPTED" },
+        { "id": "services.list", "refIndex": 2, "class": "ADAPTED" },
+        { "id": "services.cta-band", "refIndex": 3, "class": "ADAPTED" },
+        { "id": "shell.footer", "refIndex": 4, "class": "ADAPTED" },
+        { "id": "services.faq", "refIndex": null, "class": "NOVEL" }
+      ]
+    },
+    "/contact": {
+      "refUrl": "https://costarroofinginc.com/contact-us/",
+      "sections": [
+        { "id": "shell.header", "refIndex": 0, "class": "ADAPTED" },
+        { "id": "contact.page-hero", "refIndex": 1, "class": "ADAPTED" },
+        { "id": "contact.form-block", "refIndex": 2, "class": "ADAPTED" },
+        { "id": "contact.map", "refIndex": 3, "class": "ADAPTED" },
+        { "id": "shell.footer", "refIndex": 4, "class": "ADAPTED" }
+      ]
+    },
+    "/privacy": {
+      "refUrl": "https://costarroofinginc.com/privacy-policy/",
+      "sections": [
+        { "id": "shell.header", "refIndex": 0, "class": "ADAPTED" },
+        { "id": "privacy.body", "refIndex": 1, "class": "NOVEL" },
+        { "id": "shell.footer", "refIndex": 2, "class": "ADAPTED" }
+      ]
+    }
+  }
+}
