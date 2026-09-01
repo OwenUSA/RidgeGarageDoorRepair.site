@@ -110,6 +110,86 @@ export default {
   // Set when the palette is generated (merged prompt 5+9). Each site MUST land on a
   // different palette: Atlas is plum/crimson (seed 500656), Forge a green/dark ramp
   // (seed 1005). Re-roll on a hue collision -- these sites must look independently built.
-  masterSeed: 3104,
+  // ---- Prompt 5+9: palette ------------------------------------------------------------
+  // The ramp is the REFERENCE's own, extracted at Prompt 1 (docs/profile.md sec.7,
+  // harness/tokens.json). palette.mjs converts it to OKLCH, holds every L and C EXACTLY,
+  // and re-derives H from a random primary hue. So these hexes never ship -- only their
+  // lightness/chroma structure does.
+  //
+  // Role mapping, and why it is not the obvious one:
+  //   accent      = #064d2a, the reference's ACTUAL call CTA fill. L 0.3705 / C 0.0884.
+  //   accentDeep  = #27282a, its ACTUAL hover. L 0.2766, darker, as the gate requires.
+  //   primary     = #3f444b, the structural slate the reference uses for dark furniture.
+  //                 Its chroma (0.0117) is below the accent's, which is the gate's
+  //                 "the eye goes to the action, not the furniture" rule.
+  //   primaryDeep = #0c0d0e, the reference's deepest observed surface.
+  // The reference's bright green #03a143 (L 0.6190 / C 0.1758) is deliberately NOT in the
+  // ramp: at L 0.62 neither white (4.06:1) nor ink (4.28:1) reaches AA on it -- it fails
+  // AA in the reference's own palette, and no hue rotation can rescue a fixed L. Adopting
+  // it as the CTA fill is exactly how a build ships a CTA nobody can read.
+  referenceRamp: {
+    primary: '#3f444b',
+    primaryDeep: '#0c0d0e',
+    accent: '#064d2a',
+    accentDeep: '#27282a',
+    neutral0: '#ffffff',
+    neutral200: '#f2f6f9',
+    neutral400: '#ccd6df',
+    neutral600: '#696969',
+    neutral900: '#27282a',
+  },
+
+  // EXEMPT from hue rotation (A-7). A randomly green error state is a bug.
+  semantic: {
+    error: '#b3261e',
+    success: '#1e7a3c',
+    warning: '#a15c00',
+  },
+
+  // The fg/bg combinations the SHELL ACTUALLY RENDERS. Kept synchronised with
+  // app/globals.css by hand -- adding a pair nothing renders makes the gate stricter than
+  // the site, and omitting one the site renders is how Atlas shipped an invisible CTA.
+  // Any gradient band is declared as ONE gradient entry and scored on its worst sample;
+  // flat-modelling a ramp is the defect this file exists to prevent.
+  pairsInUse: [
+    { name: 'body-on-surface',        fg: 'neutral900',   bg: 'neutral0',    min: 4.5, kind: 'text' },
+    { name: 'muted-on-surface',       fg: 'neutral600',   bg: 'neutral0',    min: 4.5, kind: 'text' },
+    { name: 'heading-on-surface',     fg: 'primaryDeep',  bg: 'neutral0',    min: 4.5, kind: 'text' },
+    { name: 'eyebrow-on-surface',     fg: 'accent',       bg: 'neutral0',    min: 4.5, kind: 'text' },
+    { name: 'link-on-surface',        fg: 'accent',       bg: 'neutral0',    min: 4.5, kind: 'text' },
+    { name: 'body-on-alt',            fg: 'neutral900',   bg: 'neutral200',  min: 4.5, kind: 'text' },
+    { name: 'heading-on-alt',         fg: 'primaryDeep',  bg: 'neutral200',  min: 4.5, kind: 'text' },
+    // No muted-grey-on-alt pair exists on purpose: neutral600 on neutral200 is 4.28:1 in
+    // the reference's OWN ramp, so no rotation can rescue it. On the alt band secondary
+    // text is neutral900, never grey. globals.css enforces this.
+    { name: 'body-on-dark',           fg: 'neutral0',     bg: 'primary',     min: 4.5, kind: 'text' },
+    { name: 'muted-on-dark',          fg: 'neutral200',   bg: 'primary',     min: 4.5, kind: 'text' },
+    { name: 'body-on-deep',           fg: 'neutral0',     bg: 'primaryDeep', min: 4.5, kind: 'text' },
+    { name: 'muted-on-deep',          fg: 'neutral400',   bg: 'primaryDeep', min: 4.5, kind: 'text' },
+    { name: 'footer-link-on-deep',    fg: 'neutral200',   bg: 'primaryDeep', min: 4.5, kind: 'text' },
+    // The CTA band is a single ramp primary -> primaryDeep, not two flat fields.
+    { name: 'band-text-on-gradient',  fg: 'neutral0',     bg: { gradient: ['primary', 'primaryDeep'] }, min: 4.5, kind: 'text' },
+    { name: 'band-muted-on-gradient', fg: 'neutral200',   bg: { gradient: ['primary', 'primaryDeep'] }, min: 4.5, kind: 'text' },
+    // The call-now CTA. Same fill in the header button, the hero, every band and the
+    // mobile sticky call bar -- one token, gated once.
+    { name: 'cta-label',              fg: 'neutral0',     bg: 'accent',      min: 4.5, kind: 'cta'  },
+    { name: 'cta-label-hover',        fg: 'neutral0',     bg: 'accentDeep',  min: 4.5, kind: 'text' },
+    { name: 'ghost-label-on-surface', fg: 'primaryDeep',  bg: 'neutral0',    min: 4.5, kind: 'text' },
+    { name: 'ghost-edge-on-surface',  fg: 'borderStrong', bg: 'neutral0',    min: 3,   kind: 'ui'   },
+    { name: 'ghost-label-on-dark',    fg: 'neutral0',     bg: 'primary',     min: 4.5, kind: 'text' },
+    { name: 'ghost-edge-on-dark',     fg: 'neutral0',     bg: 'primary',     min: 3,   kind: 'ui'   },
+    { name: 'input-edge-on-surface',  fg: 'borderStrong', bg: 'neutral0',    min: 3,   kind: 'ui'   },
+    { name: 'input-edge-on-alt',      fg: 'borderStrong', bg: 'neutral200',  min: 3,   kind: 'ui'   },
+    // Focus ring is two layers: a surface-coloured inner halo, then the dark ring. Both
+    // layers gated, on the page, on the CTA fill and on the dark band.
+    { name: 'focus-ring-on-page',     fg: 'focus',        bg: 'neutral0',    min: 3,   kind: 'focus' },
+    { name: 'focus-ring-on-alt',      fg: 'focus',        bg: 'neutral200',  min: 3,   kind: 'focus' },
+    { name: 'focus-halo-on-accent',   fg: 'neutral0',     bg: 'accent',      min: 3,   kind: 'focus' },
+    { name: 'focus-halo-on-deep',     fg: 'neutral0',     bg: 'primaryDeep', min: 3,   kind: 'focus' },
+    { name: 'error-on-surface',       fg: 'error',        bg: 'neutral0',    min: 4.5, kind: 'text' },
+    { name: 'success-on-surface',     fg: 'success',      bg: 'neutral0',    min: 4.5, kind: 'text' },
+  ],
+
+  masterSeed: 7104,
   gradientSamples: 5,
 };

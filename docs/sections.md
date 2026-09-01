@@ -181,3 +181,83 @@ section, where `NN` is the reference band index in the tables above. That string
 `similarity.mjs` pairs on. **If a row in this file changes its `ref band`, the matching
 `refSection` in `content/copy.ts` must change with it** — the two are a machine twin pair
 and are the one place this file can silently drift.
+
+---
+
+## MACHINE-READABLE CONTRACT - read by the shared harness
+
+**EDIT THIS TABLE AND THE HUMAN TABLES ABOVE TOGETHER.** They are a machine twin
+pair and this one is the only half `diff.mjs` can read. The human tables above are
+kept because they are more useful to a person; the parser cannot read them, because
+it expects one fixed column order and every site in this programme wrote its own.
+
+Column order is FIXED and is:
+
+    | /route | ref-section-id | our-section-id | CLASS | reason |
+
+Rules the parser enforces, and the reasons they exist:
+
+- The **ref column carries the reference SECTION ID**, never an ordinal. Ordinals
+  shift between breakpoints when a band splits, so an ordinal pairs our services
+  block against their CTA band at mobile. The ids here are the `refSection` values
+  already carried by `content/copy.ts` and they must stay identical in both files.
+- The ref column may be **EMPTY**, and is, for the four sections this build ADDS.
+  A section with no reference band has no counterpart and reports UNPAIRED forever.
+  That is a correct result, not a gap to fill, and it must not be invented away.
+- `s14-faq` is DELETED **on `/`** and reappears nowhere as a paired row: the FAQ was
+  relocated to `/services`, and a band moved to another route has no same-route
+  counterpart. `services-faq` is therefore NOVEL with an empty ref column, not a
+  cross-route pairing.
+- **Our section components declare `data-section="<our-section-id>"`, dash-form,
+  exactly as spelled here.** Without it identity pairing never fires and every band
+  falls through to the page-progress join, which mispairs precisely where this build
+  deliberately reorders or drops a reference band - which Prompt 3 required it to do.
+  Dots are not legal in either id column; `home.hero` in the human tables is
+  `home-hero` here and in the markup.
+
+| /route | ref-section-id | our-section-id | CLASS | reason |
+|---|---|---|---|---|
+| / | s00-header | shell-header | ADAPTED | shared shell; five flat routes, our phone CTA |
+| / | s01-hero | home-hero | ADAPTED | our proposition and copy, placeholder for their hero art |
+| / | s02-trust | home-trust-strip | ADAPTED | D-14 TODO(fact) chips at the reference badge dimensions |
+| / | s03-about | home-about-teaser | ADAPTED | two-column text + placeholder image |
+| / | s04-testimonials | home-testimonials-head | ADAPTED | heading band above D-13 placeholder cards |
+| / | s05-services | home-services-grid | ADAPTED | eight garage-door services regrouped by symptom |
+| / | s06-expertise | home-expertise-band | ADAPTED | full-bleed statement band |
+| / | s07-commitment | home-commitment | ADAPTED | h2 + three h4 cards + closing paragraph |
+| / | s08-performance | home-performance-band | ADAPTED | statement band with an image |
+| / | s09-components | home-components-grid | ADAPTED | their materials grid becomes our door-components grid |
+| / | s10-blog | ref-band10-blog | DELETED | D-01 no blog; not built, no counterpart of ours exists |
+| / | s11-why-choose | home-why-choose | ADAPTED | h2 + intro + four reason paragraphs, no invented credentials |
+| / | s12-projects-head | ref-band12-projects-head | DELETED | heading for band 13, goes with it |
+| / | s13-projects | ref-band13-projects | DELETED | D-09 their photos and D-02 every card is a city page |
+| / | s14-faq | ref-band14-faq | DELETED | MOVED to /services in-page; no same-route counterpart, UNPAIRED is correct |
+| / | s15-cta | home-cta-band | ADAPTED | thin CTA strip: call + request a callback |
+| / | s16-map | home-map | ADAPTED | city-grid half deleted per D-02; Our Location half survives, zoom ~13 |
+| / | s17-footer | shell-footer | ADAPTED | NAP, hours, SERVICE_AREA; no city column, no email column |
+| / |  | home-process | NOVEL | what happens when you call; no reference band exists |
+| / |  | home-transparency | NOVEL | you see the broken part; no reference band exists |
+| /about | s00-header | shell-header | ADAPTED | shared shell |
+| /about | s01-about-hero | about-page-hero | ADAPTED | page-title band |
+| /about | s02-story | about-story | ADAPTED | no founding year, headcount or credentials (D-14, D-17) |
+| /about | s03-values | about-values | ADAPTED | 4-card values block |
+| /about | s04-about-cta | about-cta-band | ADAPTED | closing CTA |
+| /about | s05-footer | shell-footer | ADAPTED | shared shell |
+| /services | s00-header | shell-header | ADAPTED | shared shell |
+| /services | s01-services-hero | services-page-hero | ADAPTED | page-title band |
+| /services | s02-services-list | services-list | ADAPTED | heading + intro only; that is all the reference band is |
+| /services | s03-services-cta | services-cta-band | ADAPTED | closing CTA |
+| /services | s04-footer | shell-footer | ADAPTED | shared shell |
+| /services |  | services-symptoms | NOVEL | the eight services in four symptom groups; split out at Prompt 3 |
+| /services |  | services-faq | NOVEL | FAQ moved off the home page; no counterpart at this position |
+| /contact | s00-header | shell-header | ADAPTED | shared shell |
+| /contact | s01-contact-hero | contact-page-hero | ADAPTED | page-title band |
+| /contact | s02-form | contact-form-block | ADAPTED | D-05 fields; no email field, measured on input geometry |
+| /contact | s03-contact-map | contact-map | ADAPTED | coords-only zoom ~15 with a directions link; LENGTH EXEMPT |
+| /contact | s04-footer | shell-footer | ADAPTED | shared shell |
+| /privacy | s00-header | shell-header | ADAPTED | shared shell |
+| /privacy | s01-privacy | privacy-body | NOVEL | D-16; describes what OUR site does, nothing of theirs survives |
+| /privacy | s02-footer | shell-footer | ADAPTED | shared shell |
+
+41 rows: 32 ADAPTED, 5 NOVEL, 4 DELETED. `shell-header` and `shell-footer` are one
+lead-owned implementation measured five times.

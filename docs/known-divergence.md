@@ -56,9 +56,6 @@ Every retained section carries our business facts or our copy, so none satisfies
 only. Reasoning in `docs/sections.md`. Declaring FIDELITY sections to give the pixel metric
 customers would manufacture the exact failure mode `CLAUDE.md` warns about.
 
-## Palette seeds
-
-Recorded when the palette is generated. Not yet run.
 
 ## F-07 — COLOR IS TERMINAL, and it is terminal from the start (A-8)
 
@@ -165,3 +162,152 @@ so nobody reads a pale hero placeholder as a token bug.
 One fix attempt per section. On the first miss the residual and a hypothesis are written
 here and the section is floored — never a second attempt. Sections floored this way are
 floored by policy, not by measurement, and that distinction is recorded per entry.
+
+## Palette seeds - APPLIED at the merged Prompt 5+9 turn
+
+Reproduce any row exactly with:
+
+    MSYS_NO_PATHCONV=1 node ../_shared/harness/src/palette.mjs --seed <n> [--emit]
+
+| | |
+|---|---|
+| master seed | `7104` |
+| **winning seed** | **`79039`** |
+| all five candidate seeds | `79039`, `26330`, `644461`, `267192`, `70262` |
+| rolls / rejected | 5 rolls, 0 rejected, 5 survivors |
+| applied scheme | triadic, accent at +120 degrees |
+| applied primary hue | 270 (violet-slate) |
+| applied accent hue | 30 (deep rust) |
+| neutral chroma tint | 0.037 |
+
+| seed | scheme | primary hue | accent hue | neutral C | CTA contrast | CTA chroma | outcome |
+|---|---|---:|---:|---:|---:|---:|---|
+| **79039** | **triadic** | **270** | **30** | **0.037** | **10.79:1** | **0.0886** | **WINNER** |
+| 26330 | analogous | 116 | 146 | 0.037 | 10.00:1 | 0.0889 | candidate |
+| 644461 | split-complementary | 59 | 269 | 0.060 | 10.59:1 | 0.0881 | candidate |
+| 267192 | analogous | 75 | 105 | 0.031 | 10.29:1 | 0.0784 | candidate |
+| 70262 | triadic | 247 | 127 | 0.048 | 10.14:1 | 0.0889 | candidate |
+
+Selection rule, per OVERRIDE 1: the surviving candidate whose call-now CTA has the
+highest contrast against its own background; ties break to the lowest seed. No tie
+occurred. Every L and every C from the extracted reference ramp is preserved exactly;
+only H moved. Neutrals carry a 3.7% chroma tint of the primary hue rather than being
+pure grey.
+
+**Sibling collision check.** Atlas is plum/crimson at primary hue 332; Forge is a green
+ramp at primary hue 150.6; Titan is at 216.7. The winner sits at 270, which is 62 degrees
+from Atlas, 119 from Forge and 53 from Titan. Three master seeds were discarded before
+7104 for landing inside a 30-degree arc of Atlas or Forge (3104 -> hue 124, 31040 -> 173,
+10431 -> 335, 20260901 -> 332, 5104 -> 194); the discard was on hue distance only, never
+on how the candidate scored.
+
+### The ramp role mapping, and the trap it avoids
+
+`referenceRamp` in `harness.config.mjs` is the reference's own set, and the role mapping
+is deliberately not the obvious one:
+
+| token | reference hex | L | C | role |
+|---|---|---:|---:|---|
+| accent | `#064d2a` | 0.3705 | 0.0884 | the call CTA fill - the reference's ACTUAL CTA colour |
+| accentDeep | `#27282a` | 0.2766 | 0.0039 | its ACTUAL hover |
+| primary | `#3f444b` | 0.3603 | 0.0117 | structural dark furniture |
+| primaryDeep | `#0c0d0e` | 0.1583 | 0.0027 | deepest surface, the footer band |
+
+The reference's bright green `#03a143` (L 0.6190, C 0.1758) is **deliberately absent**
+from the ramp. At that lightness neither white (4.06:1) nor ink (4.28:1) reaches AA on
+it - it fails AA in the reference's own palette - and because the technique holds L
+exactly, no hue rotation can rescue it. Adopting the highest-chroma colour on the page as
+the CTA fill because it is the highest-chroma colour is precisely how a build ships a CTA
+nobody can read.
+
+### AA on the pairs actually in use
+
+28 foreground/background pairs are declared in `harness.config.mjs -> pairsInUse` and all
+28 pass. The full table is printed by `node ../_shared/harness/src/palette.mjs`. Three
+things about that list are load-bearing:
+
+1. **The CTA band is declared as ONE gradient entry**, `{ fg: neutral0, bg: { gradient:
+   ['primary', 'primaryDeep'] } }`, sampled at five points in OKLCH and scored on the
+   worst sample. It is never modelled as two flat rows at the stops. Flat-modelling a ramp
+   is how a sibling site shipped an invisible CTA that passed its own AA gate.
+2. **There is deliberately no muted-grey-on-alt-band pair.** `neutral600` on `neutral200`
+   is 4.28:1 in the reference's own ramp, so a rotation cannot rescue it either. On the
+   alt band secondary text is `neutral900` at normal weight, never grey, and
+   `app/globals.css` enforces that with a per-band `.u-muted` rule.
+3. **The focus ring is two layers** - a surface-coloured inner halo then the dark ring -
+   because that is the only construction holding 3:1 against both a white page and a
+   saturated accent fill from one token. Both layers are gated, on the page, on the alt
+   band, on the CTA fill and on the deep band.
+
+Semantic colours (error, success, warning) are EXEMPT from the rotation and keep
+conventional hues; the gate asserts the hue arc, not just the contrast, so a randomly
+green error state cannot survive.
+
+### F-13 - dark bands are keyed on a data attribute, and it is verified in the BUILT page
+
+One convention, `data-surface="alt" | "dark" | "deep" | "gradient"`, and the CSS keys on
+the same data attribute. The sibling defect this exists to prevent: dark-surface rules
+keyed on a CLASS while the markup used a DATA ATTRIBUTE, so the two never met and every
+dark band silently painted light-band foregrounds, shipping a 1.16:1 secondary CTA on all
+five routes.
+
+Verified, not asserted: `contrast.mjs` scored 374 painted pairs across all five routes and
+three breakpoints, and the footer rows read `#cbd4ee` on `#0c0d0e` at 13.15:1. If the deep
+rule had not applied, the footer would have been white-on-white and failed.
+
+### F-14 - the two halves of docs/sections.md must be edited TOGETHER
+
+`docs/sections.md` now carries a human table per route AND a machine-readable table at the
+foot in the shared parser's fixed column order:
+
+    | /route | ref-section-id | our-section-id | CLASS | reason |
+
+**They are a machine twin pair. An edit to one is an edit to both.** Before this turn the
+file parsed to ZERO rows, and a contract that parses to nothing is indistinguishable from
+a contract that classifies nothing: every section silently defaulted to FIDELITY and
+adapted content would have been pixel-diffed against the reference - the single most
+expensive failure mode this process names. Two of the five sites on this harness had the
+same defect and a third parsed 5 of 88. `diff.mjs` now throws if the file mentions class
+names and matches no rows.
+
+Three rules the machine table obeys:
+
+- The ref column carries the reference SECTION ID (`s05-services`), never an ordinal.
+  Ordinals shift between breakpoints when a band splits.
+- The ref column is EMPTY for the four sections this build ADDS. They have no counterpart
+  and report UNPAIRED forever, which is a correct result and must not be invented away.
+  `services-faq` is one of them: a band relocated from the reference's home page onto
+  another route has no same-route counterpart.
+- Our components declare `data-section="<our-section-id>"` in dash form, exactly as
+  spelled in that table. Dots are not legal in the parser's id columns, so `home.hero` in
+  the human table is `home-hero` in the machine table and in the markup.
+
+`content/copy.ts` carries the same ref ids in its `refSection` fields. That is a third
+copy of the same mapping and it must move with the other two.
+
+### F-15 - the shared harness has NO reference capture, and cannot get one
+
+`diff.mjs` reads `.harness/cap/ref/<route>-<bp>/meta.json`. That directory does not exist
+and cannot be created: one attempt at `capture.mjs --side ref` this turn returned
+`Execution context was destroyed, most likely because of a navigation` - the F-10 bot wall
+reloading itself under the probe. No further attempt will be made.
+
+The Prompt 1 reference capture survives, but in the LEGACY layout (`.harness/ref/<route>/
+<bp>/metrics.json`) with a different metric vector: it records `box/pad/inner/gridCols/
+childCount/rows/perRow/h1/h2/h3/p/eyebrow/button/card/image/chars/absY`, whereas the
+shared probe records `id/tag/cls/box/appearance/innerGrid/headingText/textChars`. The two
+overlap on box geometry and on most type fields but not on all of them, and the legacy
+file carries no section `id` in the shared probe's `sNN-slug` form.
+
+**Consequence, and it is the honest one: the structural and pixel columns of the
+divergence table cannot be produced by the shared harness as it stands.** `diff.mjs`
+reports `missing capture` for all fifteen route/breakpoint passes. Writing a converter
+that fabricates the missing fields would produce numbers that look like measurements and
+are not, which is the failure this whole document exists to prevent. This is flagged to
+the programme lead rather than papered over; it blocks the build wave's per-section
+numbers, not this turn's palette or render-truth results.
+
+What DOES measure cleanly today, and did: the two render-truth gates (`contrast.mjs`,
+`rendertruth.mjs`), which score the built page directly and need no reference, and the
+NOVEL token set, which `loadTokens()` reads from `app/globals.css` (13 colours, 16 sizes,
+5 weights, 7 radii, 4 shadows, 12 spacing steps).

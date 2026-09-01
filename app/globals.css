@@ -1,8 +1,292 @@
 @import "tailwindcss";
+@import "./shell.css";
 
-/* Prompt 5 replaces this with the extracted token set. Prompt 1 ships the bare
-   minimum needed to prove the harness runs against a real scaffold. */
+/* ===========================================================================
+   Ridge Garage Door Repair - token set (Prompt 5) + applied palette (Prompt 9,
+   folded in per amendment A-7).
+
+   GEOMETRY AND TYPE are extracted from the reference (docs/profile.md section 7,
+   harness/tokens.json). They are the reference set NOVEL sections are scored
+   against at zero violations.
+
+   COLOR is NOT the reference's. The extracted ramp was converted to OKLCH, every
+   L and C held exactly, and the whole set re-derived from a random primary hue -
+   master seed 7104, winning seed 79039, triadic (+120deg), primary hue 270,
+   accent hue 30, neutral tint 0.037. Reproduce with:
+       node ../_shared/harness/src/palette.mjs --seed 79039 --emit
+   Seeds and the full AA table: docs/known-divergence.md.
+
+   Values are written as HEX, not oklch(), on purpose: getComputedStyle returns
+   rgb() for a hex-authored color, which is exactly what diff.mjs's normColor()
+   canonicalises to. An oklch() author string round-trips through a second
+   dialect for no gain.
+   =========================================================================== */
+
 @theme {
-  --color-ink: #27282a;
-  --color-body: #696969;
+  /* ---- palette - seed 79039. Do not hand-edit; re-emit from the seed. ---- */
+  --color-primary: #41434b;
+  --color-primary-deep: #0c0d0e;
+  --color-accent: #672b22;
+  --color-accent-deep: #2a2727;
+  --color-surface: #ffffff;
+  --color-neutral-200: #f2f5ff;
+  --color-neutral-400: #cbd4ee;
+  --color-neutral-600: #61697f;
+  --color-neutral-900: #21273b;
+  --color-border: #cbd4ee;
+  --color-border-strong: #61697f;
+  --color-focus: #620b05;
+  /* semantic - EXEMPT from hue rotation (A-7), conventional hues held */
+  --color-error: #b3261e;
+  --color-success: #1e7a3c;
+  --color-warning: #a15c00;
+
+  /* ---- type scale - every size observed on the reference, px ---- */
+  --text-2xs: 12px;
+  --text-xs: 13px;
+  --text-sm: 14px;
+  --text-md: 15px;
+  --text-base: 16px;
+  --text-lg: 17px;
+  --text-xl: 18px;
+  --text-2xl: 22px;
+  --text-2xla: 23px;
+  --text-3xl: 24px;
+  --text-4xl: 28px;
+  --text-5xl: 36px;
+  --text-6xl: 48px;
+  --text-6xla: 50px;
+  --text-7xl: 56px;
+  --text-8xl: 69px;
+
+  /* ---- weights ---- */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* ---- radii ---- */
+  --radius-none: 0px;
+  --radius-2xs: 2px;
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 50px;
+
+  /* ---- shadows - the three the reference actually paints ---- */
+  --shadow-none: none;
+  --shadow-lift: 0px 30px 60px 0px rgba(0, 0, 0, 0.1);
+  --shadow-card: 9.899px 9.899px 30px 0px rgba(0, 0, 0, 0.1);
+  --shadow-soft: 0px 10px 30px 10px rgba(0, 0, 0, 0.05);
+
+  /* ---- spacing. 0/8/12/24/32/40/48/80 are extracted; 4/16/64/96 are
+         interpolations on the same 8px rhythm, declared so no component has to
+         invent one. ---- */
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+
+  /* ---- fonts. Mulish display, Inter body - both real, both loaded on the
+         reference, both SIL OFL, both self-hosted here by next/font. F-01/F-11:
+         there is NO substitution floor and heading metrics must converge. ---- */
+  --font-display: var(--font-mulish), "Segoe UI", system-ui, sans-serif;
+  --font-body: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+
+  /* ---- container ---- */
+  --container-site: 1280px;
+
+  /* ---- breakpoints - the load-bearing reference queries ---- */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1025px;
+  --breakpoint-xl: 1200px;
+}
+
+/* Non-gated ratios. Line-height and letter-spacing have no @theme namespace
+   diff.mjs reads, so they live as plain custom properties. */
+:root {
+  --lh-tight: 1.1;
+  --lh-heading: 1.3;
+  --lh-body: 1.5;
+  --ls-h1: -2px;
+  --ls-h2: -1px;
+  --ls-eyebrow: 0.5px;
+  --header-h: 85px;
+  --callbar-h: 56px;
+}
+@media (min-width: 768px) {
+  :root { --header-h: 104px; }
+}
+
+/* =============================== base =================================== */
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-surface);
+  color: var(--color-neutral-900);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--lh-body);
+}
+@media (min-width: 768px) { body { font-size: var(--text-md); } }
+@media (min-width: 1025px) { body { font-size: var(--text-base); } }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-primary-deep);
+  margin: 0;
+}
+h1 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-extrabold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-h1);
+}
+@media (min-width: 768px)  { h1 { font-size: var(--text-5xl); } }
+@media (min-width: 1025px) { h1 { font-size: var(--text-6xl); } }
+h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-heading);
+}
+@media (min-width: 1025px) { h2 { font-size: var(--text-3xl); } }
+h3 { font-size: var(--text-xl); font-weight: var(--font-weight-bold); line-height: var(--lh-heading); }
+h4 { font-size: var(--text-lg); font-weight: var(--font-weight-bold); line-height: var(--lh-heading); }
+p  { margin: 0; }
+
+/* =========================== A-14, one rule ==============================
+   Every tel: link is a primary conversion target. WCAG 2.5.8 in ONE place, not
+   per component. min-height is inert on a purely inline box, so a tel link
+   inside prose keeps its natural metrics and the measured type scale is
+   untouched.                                                                */
+a[href^="tel:"] { min-height: 44px; }
+
+/* ============================ focus, D-19 ================================
+   TWO layers: a surface-coloured inner halo, then the dark ring. That is the
+   only construction that holds 3:1 against BOTH a white page and a saturated
+   accent fill with a single token. Both layers are in harness.config.mjs
+   pairsInUse and both are gated.                                            */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-surface);
+}
+
+/* =========================== surface bands ===============================
+   ONE convention: a data attribute, keyed by the SAME data attribute in CSS.
+   The sibling defect this avoids: dark-surface rules keyed on a class while the
+   markup used data-surface, so every dark band silently painted light-band
+   foregrounds. Verified in the BUILT page, not just here.                    */
+[data-surface="alt"]  { background: var(--color-neutral-200); color: var(--color-neutral-900); }
+[data-surface="alt"]  :is(h1, h2, h3, h4) { color: var(--color-primary-deep); }
+
+[data-surface="dark"] { background: var(--color-primary); color: var(--color-surface); }
+[data-surface="dark"] :is(h1, h2, h3, h4) { color: var(--color-surface); }
+
+[data-surface="deep"] { background: var(--color-primary-deep); color: var(--color-surface); }
+[data-surface="deep"] :is(h1, h2, h3, h4) { color: var(--color-surface); }
+
+[data-surface="gradient"] {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%);
+  color: var(--color-surface);
+}
+[data-surface="gradient"] :is(h1, h2, h3, h4) { color: var(--color-surface); }
+
+/* Muted text, per band. On the alt band secondary text is neutral-900, NEVER
+   neutral-600: that pair is 4.28:1 in the reference's own ramp and no hue
+   rotation can rescue a fixed L pair. */
+.u-muted { color: var(--color-neutral-600); }
+[data-surface="alt"] .u-muted { color: var(--color-neutral-900); }
+[data-surface="dark"] .u-muted { color: var(--color-neutral-200); }
+[data-surface="deep"] .u-muted { color: var(--color-neutral-400); }
+[data-surface="gradient"] .u-muted { color: var(--color-neutral-200); }
+
+/* ============================= primitives ================================ */
+
+.u-container {
+  width: 100%;
+  max-width: var(--container-site);
+  margin-inline: auto;
+  padding-inline: var(--spacing-6);
+}
+@media (min-width: 1025px) { .u-container { padding-inline: var(--spacing-10); } }
+
+.u-eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+@media (min-width: 768px) { .u-eyebrow { font-size: var(--text-base); } }
+[data-surface="dark"] .u-eyebrow,
+[data-surface="deep"] .u-eyebrow,
+[data-surface="gradient"] .u-eyebrow { color: var(--color-surface); }
+
+.u-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  min-height: 44px;
+  padding: var(--spacing-3) var(--spacing-8);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-heading);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.u-btn--call { background: var(--color-accent); color: var(--color-surface); }
+.u-btn--call:hover { background: var(--color-accent-deep); color: var(--color-surface); }
+.u-btn--ghost {
+  background: transparent;
+  color: var(--color-primary-deep);
+  border-color: var(--color-border-strong);
+}
+.u-btn--ghost:hover { background: var(--color-neutral-200); }
+[data-surface="dark"] .u-btn--ghost,
+[data-surface="deep"] .u-btn--ghost,
+[data-surface="gradient"] .u-btn--ghost { color: var(--color-surface); border-color: var(--color-surface); }
+
+.u-link { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+[data-surface="deep"] .u-link { color: var(--color-neutral-200); }
+
+.u-skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--color-surface);
+  color: var(--color-primary-deep);
+  padding: var(--spacing-3) var(--spacing-4);
+  font-weight: var(--font-weight-bold);
+}
+.u-skip:focus { left: var(--spacing-4); top: var(--spacing-2); }
+
+/* ============================== reduced motion ============================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
