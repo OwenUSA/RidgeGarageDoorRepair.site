@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @import "./shell.css";
+/* Section primitives for the Prompt 6+7 build wave. Lead-owned and frozen the
+   same way the shell is (A-6): no section agent edits app/sections.css. */
+@import "./sections.css";
 
 /* ===========================================================================
    Ridge Garage Door Repair - token set (Prompt 5) + applied palette (Prompt 9,

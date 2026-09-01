@@ -1,21 +1,25 @@
 import type { Metadata } from 'next';
-import { copy } from '@/content/copy';
+import PrivacyBody from '@/components/sections/PrivacyBody';
+import { getMeta } from '@/lib/sections';
 
-// PROMPT 5 STUB. The shared shell only; the /privacy sections land in the build wave.
-// data-section carries the our-section-id from the machine-readable table at the foot of
-// docs/sections.md, dash-form, so identity pairing fires instead of the progress join.
+// ROUTE ASSEMBLY - lead-owned. Written once, before the build wave, so that four
+// concurrent agents never contend over this file. Section ORDER here is the render
+// order declared by content/copy.ts, which deliberately differs from the reference band
+// order; A-12 makes `position` ADVISORY, so reordering cannot inflate a structural
+// residual. privacy.body is NOVEL and is measured once, at zero token violations (A-9).
+
+const meta = getMeta('/privacy');
 
 export const metadata: Metadata = {
-  title: copy.routes['/privacy'].meta.title,
-  description: copy.routes['/privacy'].meta.description,
+  title: meta.title,
+  description: meta.description,
   alternates: { canonical: '/privacy' },
 };
 
 export default function Page() {
   return (
-    <section className="stub u-container" data-section="privacy-body">
-      <h1>Privacy policy</h1>
-      <p className="stub__note u-muted">Section shell only. Content lands in the build wave.</p>
-    </section>
+    <>
+      <PrivacyBody />
+    </>
   );
 }

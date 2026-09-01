@@ -1,21 +1,33 @@
 import type { Metadata } from 'next';
-import { copy } from '@/content/copy';
+import ServicesPageHero from '@/components/sections/ServicesPageHero';
+import ServicesList from '@/components/sections/ServicesList';
+import ServicesSymptoms from '@/components/sections/ServicesSymptoms';
+import ServicesFaq from '@/components/sections/ServicesFaq';
+import ServicesCtaBand from '@/components/sections/ServicesCtaBand';
+import { getMeta } from '@/lib/sections';
 
-// PROMPT 5 STUB. The shared shell only; the /services sections land in the build wave.
-// data-section carries the our-section-id from the machine-readable table at the foot of
-// docs/sections.md, dash-form, so identity pairing fires instead of the progress join.
+// ROUTE ASSEMBLY - lead-owned. Written once, before the build wave, so that four
+// concurrent agents never contend over this file. Section ORDER here is the render
+// order declared by content/copy.ts, which deliberately differs from the reference band
+// order; A-12 makes `position` ADVISORY, so reordering cannot inflate a structural
+// residual. services.symptoms and services.faq are NOVEL: no reference band exists at either position, so both are scored on token conformance rather than against a reference.
+
+const meta = getMeta('/services');
 
 export const metadata: Metadata = {
-  title: copy.routes['/services'].meta.title,
-  description: copy.routes['/services'].meta.description,
+  title: meta.title,
+  description: meta.description,
   alternates: { canonical: '/services' },
 };
 
 export default function Page() {
   return (
-    <section className="stub u-container" data-section="services-page-hero">
-      <h1>Garage door services in Yukon</h1>
-      <p className="stub__note u-muted">Section shell only. Content lands in the build wave.</p>
-    </section>
+    <>
+      <ServicesPageHero />
+      <ServicesList />
+      <ServicesSymptoms />
+      <ServicesFaq />
+      <ServicesCtaBand />
+    </>
   );
 }

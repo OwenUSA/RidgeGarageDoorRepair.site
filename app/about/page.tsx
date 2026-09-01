@@ -1,21 +1,31 @@
 import type { Metadata } from 'next';
-import { copy } from '@/content/copy';
+import AboutPageHero from '@/components/sections/AboutPageHero';
+import AboutStory from '@/components/sections/AboutStory';
+import AboutValues from '@/components/sections/AboutValues';
+import AboutCtaBand from '@/components/sections/AboutCtaBand';
+import { getMeta } from '@/lib/sections';
 
-// PROMPT 5 STUB. The shared shell only; the /about sections land in the build wave.
-// data-section carries the our-section-id from the machine-readable table at the foot of
-// docs/sections.md, dash-form, so identity pairing fires instead of the progress join.
+// ROUTE ASSEMBLY - lead-owned. Written once, before the build wave, so that four
+// concurrent agents never contend over this file. Section ORDER here is the render
+// order declared by content/copy.ts, which deliberately differs from the reference band
+// order; A-12 makes `position` ADVISORY, so reordering cannot inflate a structural
+// residual. No founding year, headcount or credential appears on this route; each is a TODO(fact).
+
+const meta = getMeta('/about');
 
 export const metadata: Metadata = {
-  title: copy.routes['/about'].meta.title,
-  description: copy.routes['/about'].meta.description,
+  title: meta.title,
+  description: meta.description,
   alternates: { canonical: '/about' },
 };
 
 export default function Page() {
   return (
-    <section className="stub u-container" data-section="about-page-hero">
-      <h1>About Ridge Garage Door Repair</h1>
-      <p className="stub__note u-muted">Section shell only. Content lands in the build wave.</p>
-    </section>
+    <>
+      <AboutPageHero />
+      <AboutStory />
+      <AboutValues />
+      <AboutCtaBand />
+    </>
   );
 }

@@ -1,42 +1,51 @@
 import type { Metadata } from 'next';
-import BusinessMap from '@/components/BusinessMap';
-import { business } from '@/lib/business';
-import { copy } from '@/content/copy';
+import HomeHero from '@/components/sections/HomeHero';
+import HomeTransparency from '@/components/sections/HomeTransparency';
+import HomeServicesGrid from '@/components/sections/HomeServicesGrid';
+import HomeProcess from '@/components/sections/HomeProcess';
+import HomeAboutTeaser from '@/components/sections/HomeAboutTeaser';
+import HomeComponentsGrid from '@/components/sections/HomeComponentsGrid';
+import HomeExpertiseBand from '@/components/sections/HomeExpertiseBand';
+import HomeWhyChoose from '@/components/sections/HomeWhyChoose';
+import HomeCommitment from '@/components/sections/HomeCommitment';
+import HomePerformanceBand from '@/components/sections/HomePerformanceBand';
+import HomeTrustStrip from '@/components/sections/HomeTrustStrip';
+import HomeTestimonialsHead from '@/components/sections/HomeTestimonialsHead';
+import HomeCtaBand from '@/components/sections/HomeCtaBand';
+import HomeMap from '@/components/sections/HomeMap';
+import { getMeta } from '@/lib/sections';
 
-// PROMPT 5 STUB. The shell only. Every home section listed in docs/sections.md lands in
-// the build wave (Prompt 6+7); this file renders the shared shell so the palette,
-// tokens and both render-truth gates can be measured against a real page first.
-//
-// data-section carries the OUR-SECTION-ID from the machine-readable table at the foot of
-// docs/sections.md, dash-form. Without it, identity pairing never fires and every band
-// falls through to the page-progress join -- which mispairs exactly where this build
-// deliberately reorders or drops a reference band.
+// ROUTE ASSEMBLY - lead-owned. Written once, before the build wave, so that four
+// concurrent agents never contend over this file. Section ORDER here is the render
+// order declared by content/copy.ts, which deliberately differs from the reference band
+// order; A-12 makes `position` ADVISORY, so reordering cannot inflate a structural
+// residual. Five reference bands are absent by decision, not by omission: the blog teaser (D-01), the projects heading and the twelve city-named project cards (D-02 + D-09), and the FAQ, which moved to /services.
+
+const meta = getMeta('/');
 
 export const metadata: Metadata = {
-  title: copy.routes['/'].meta.title,
-  description: copy.routes['/'].meta.description,
+  title: meta.title,
+  description: meta.description,
   alternates: { canonical: '/' },
 };
 
 export default function Page() {
   return (
     <>
-      <section className="stub u-container" data-section="home-hero">
-        <p className="u-eyebrow stub__eyebrow">{business.serviceArea}</p>
-        <h1>{business.tagline}</h1>
-        <p className="stub__note u-muted">
-          Section shell only. The home page bands land in the build wave.
-        </p>
-      </section>
-
-      {/* D-08: the home map. Coordinates only, zoom ~13. */}
-      <section className="stub" data-section="home-map" data-surface="alt">
-        <div className="u-container">
-          <h2>Where we work</h2>
-          <p className="stub__note u-muted">{business.serviceArea}</p>
-          <BusinessMap zoom={13} />
-        </div>
-      </section>
+      <HomeHero />
+      <HomeTransparency />
+      <HomeServicesGrid />
+      <HomeProcess />
+      <HomeAboutTeaser />
+      <HomeComponentsGrid />
+      <HomeExpertiseBand />
+      <HomeWhyChoose />
+      <HomeCommitment />
+      <HomePerformanceBand />
+      <HomeTrustStrip />
+      <HomeTestimonialsHead />
+      <HomeCtaBand />
+      <HomeMap />
     </>
   );
 }

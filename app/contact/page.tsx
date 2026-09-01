@@ -1,32 +1,29 @@
 import type { Metadata } from 'next';
-import BusinessMap from '@/components/BusinessMap';
-import { copy } from '@/content/copy';
+import ContactPageHero from '@/components/sections/ContactPageHero';
+import ContactFormBlock from '@/components/sections/ContactFormBlock';
+import ContactMap from '@/components/sections/ContactMap';
+import { getMeta } from '@/lib/sections';
 
-// PROMPT 5 STUB. The shared shell only; the /contact sections land in the build wave.
-// data-section carries the our-section-id from the machine-readable table at the foot of
-// docs/sections.md, dash-form, so identity pairing fires instead of the progress join.
+// ROUTE ASSEMBLY - lead-owned. Written once, before the build wave, so that four
+// concurrent agents never contend over this file. Section ORDER here is the render
+// order declared by content/copy.ts, which deliberately differs from the reference band
+// order; A-12 makes `position` ADVISORY, so reordering cannot inflate a structural
+// residual. The form has no backend and no email field of any kind (D-05, D-03).
+
+const meta = getMeta('/contact');
 
 export const metadata: Metadata = {
-  title: copy.routes['/contact'].meta.title,
-  description: copy.routes['/contact'].meta.description,
+  title: meta.title,
+  description: meta.description,
   alternates: { canonical: '/contact' },
 };
 
 export default function Page() {
   return (
     <>
-      <section className="stub u-container" data-section="contact-page-hero">
-        <h1>Contact Ridge Garage Door Repair</h1>
-        <p className="stub__note u-muted">Section shell only. The form lands in the build wave.</p>
-      </section>
-
-      {/* D-08: the contact map, coordinates only, zoom ~15, beside the form. */}
-      <section className="stub" data-section="contact-map" data-surface="alt">
-        <div className="u-container">
-          <h2>Find us</h2>
-          <BusinessMap zoom={15} />
-        </div>
-      </section>
+      <ContactPageHero />
+      <ContactFormBlock />
+      <ContactMap />
     </>
   );
 }
