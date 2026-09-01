@@ -59,3 +59,30 @@ customers would manufacture the exact failure mode `CLAUDE.md` warns about.
 ## Palette seeds
 
 Recorded when the palette is generated. Not yet run.
+
+## F-07 — COLOR IS TERMINAL, and it is terminal from the start (A-8)
+
+The palette is randomized at token-write time (A-7), not after convergence, so the site is
+built in its final palette from the first component onward.
+
+**Color divergence from the reference is intentional and permanently excluded from every
+diff, every threshold, and every future iteration.** Stripped from the structural
+comparator: resolved color, background-color, border-color, gradient stops, shadow color.
+Retained: every geometric and typographic field, and the non-color parts of borders and
+shadows — widths, offsets, blur, spread, radii. `harness/diff.mjs --with-color` re-enables
+the color fields for debugging only; it never gates.
+
+This has no FIDELITY consequence on this build, because there are no FIDELITY sections
+(F-06). No solid-color band needs excluding from a pixel gate that does not exist.
+
+## F-08 — NOVEL sections are measured once, not per breakpoint (A-9)
+
+Token conformance has no breakpoint dimension. NOVEL rows are measured once at 1440.
+`BP_SET` is unchanged: all three breakpoints stay measured for everything geometric,
+including 768, where the primary restack resolves.
+
+## F-09 — ITERATION_CAP is 1 (A-2)
+
+One fix attempt per section. On the first miss the residual and a hypothesis are written
+here and the section is floored — never a second attempt. Sections floored this way are
+floored by policy, not by measurement, and that distinction is recorded per entry.
