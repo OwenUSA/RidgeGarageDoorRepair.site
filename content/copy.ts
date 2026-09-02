@@ -575,7 +575,7 @@ export const copy: Copy = {
       meta: {
         title: 'Contact Ridge Garage Door Repair | Yukon, OK',
         description:
-          'Call Ridge Garage Door Repair on (405) 555-0139, or leave your number and a callback window and we will ring you. Yukon and west Oklahoma City, 7 days a week.',
+          `Call ${site.name} on ${site.phone}, or leave your number and a callback window and we will ring you. ${site.city} and west Oklahoma City, 7 days a week.`,
       },
       sections: [
         {

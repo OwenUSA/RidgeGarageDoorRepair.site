@@ -25,7 +25,7 @@ export default function ContactMap() {
             ))}
           </div>
 
-          <BusinessMap zoom={15} />
+          <BusinessMap zoom={15} id="contact-map" />
         </div>
       </div>
     </section>

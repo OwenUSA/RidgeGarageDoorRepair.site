@@ -34,7 +34,7 @@ export default function HomeMap() {
 
         {/* zoom 13 on the home page: wide enough to show the metro this shop covers
             rather than one street. /contact uses 15. */}
-        <BusinessMap zoom={13} ratio="16 / 11" />
+        <BusinessMap zoom={13} ratio="16 / 11" id="home-map" />
       </div>
     </section>
   );

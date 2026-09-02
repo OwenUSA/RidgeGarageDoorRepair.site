@@ -45,8 +45,8 @@ export const business = {
 
   /** "lat,lng". Passed to Google Maps as a COORDINATE, never geocoded (D-07). */
   coords: site.coords,
-  latitude: 35.5067,
-  longitude: -97.7625,
+  latitude: Number(site.coords.split(',')[0]),
+  longitude: Number(site.coords.split(',')[1]),
 
   hours: {
     /** Human form, used verbatim in the header, footer and contact page. */

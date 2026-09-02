@@ -18,11 +18,21 @@ type Props = {
   /** width / height. Fixed so the frame reserves its box before the tiles arrive. */
   ratio?: string;
   className?: string;
+  /** Unique per instance: the map bypass link needs a distinct target id per map. */
+  id?: string;
 };
 
-export default function BusinessMap({ zoom, ratio = '16 / 10', className }: Props) {
+export default function BusinessMap({ zoom, ratio = '16 / 10', className, id = 'map' }: Props) {
+  const pastId = `${id}-past`;
   return (
     <div className={className ? `business-map ${className}` : 'business-map'}>
+      {/* Map bypass, per docs/behavior/07. An embedded map is a keyboard trap in some
+          browsers once focus enters the iframe, so a visually-hidden skip link before the
+          frame jumps a keyboard user straight past it to the address and directions link.
+          Nothing inside the iframe is content the page depends on. */}
+      <a className="u-skip business-map__bypass" href={`#${pastId}`}>
+        Skip the map
+      </a>
       <div className="business-map__frame" style={{ aspectRatio: ratio }}>
         <iframe
           src={mapEmbedSrc(zoom)}
@@ -31,7 +41,7 @@ export default function BusinessMap({ zoom, ratio = '16 / 10', className }: Prop
           referrerPolicy="no-referrer-when-downgrade"
         />
       </div>
-      <div className="business-map__meta">
+      <div className="business-map__meta" id={pastId} tabIndex={-1}>
         <p className="business-map__address">
           {business.address.street}
           <br />

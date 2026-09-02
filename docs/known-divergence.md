@@ -409,3 +409,216 @@ innocent.
 The one palette-adjacent change made during the build wave is F-16a's ghost-label move from
 `primaryDeep` to `neutral900`. It is a role reassignment within the existing token set, not
 a new token and not a hue change: both values were already in the ramp and already gated.
+
+---
+
+# FINAL — merged Prompt 10 + 11 (asset prompts + trimmed acceptance sweep)
+
+This is the last entry in the chain for this site. Everything below is a **floor** — a
+permanent, explained absence or divergence — not a defect and not a residual anyone should
+reopen.
+
+## F-19 — A-15: THERE IS NO REFERENCE SIDE, PERMANENTLY
+
+`costarroofinginc.com` answers every request — headless, headed, normal desktop UA — with a
+bot-challenge interstitial. This site kept **no complete local copy** of the reference pages,
+so no reference-side capture can ever be produced again.
+
+Re-confirmed this turn, not assumed: `diff.mjs` was run and returned
+`missing capture (run capture.mjs first)` for **all 15** route × breakpoint passes, and
+wrote `docs/divergence.md` with **0 rows**. `.harness/cap/ref/` contains one directory
+(`privacy-1440`) holding two PNGs and **no `meta.json`**, which is why even that route
+cannot be paired.
+
+- **Every structural row reports `BLOCKED/no-reference`. Never a number, never a PASS.**
+  A BLOCKED row is an absence and must read as one in every report. `0 rows` in
+  `docs/divergence.md` means *fifteen blocked passes*, not *fifteen clean passes*.
+- **No converter was written and none may be.** Back-filling the shared probe's metric
+  vector from the Prompt 1 legacy capture would produce numbers that look like measurements
+  and are not, and the next reader could not tell the difference. This was decided once and
+  is not revisited.
+- **What is still genuinely reference-derived**, because it was extracted while the
+  reference was reachable and is committed: the token set, type scale, spacing scale and
+  container widths; the section contract and its classifications; all copy and both
+  similarity gates, which score against the saved corpus; and the applied palette's exact
+  L and C structure. Only the *verification* of fidelity is lost, not the derivation.
+
+## F-20 — token conformance was BLOCKED THROUGH THE NORMAL ENTRY POINT, and how it was recovered
+
+Worth recording because it looked like a passing gate and was not reachable.
+
+`diff.mjs` computes NOVEL token conformance inside `diffOne()`, which returns early with
+`missing capture` when the reference-side `meta.json` is absent. Under F-19 that file can
+never exist here — so a check that **needs no reference side at all** (only our own capture
+and the Prompt 5 token set) was silently unrunnable, and a "0 violations" figure quoted from
+an earlier turn could not be reproduced.
+
+`scripts/token-conformance.mjs` calls the harness's own exported `loadTokens()` and
+`tokenViolations()` directly against our capture. It fabricates nothing and reads nothing
+from the reference; it removes a coupling, it does not invent a side. Result this turn:
+
+| section | route | violations | threshold | status |
+|---|---|---:|---:|---|
+| `home-transparency` | `/` | 0 | 0 | PASS |
+| `home-process` | `/` | 0 | 0 | PASS |
+| `services-symptoms` | `/services` | 0 | 0 | PASS |
+| `services-faq` | `/services` | 0 | 0 | PASS |
+| `privacy-body` | `/privacy` | — | 0 | **UNSEGMENTED — not scored, not passed** |
+
+**`privacy-body` is a genuine instrument floor.** `segmentSections()` accepts a candidate
+selector only when it yields **at least two** outer bands. `/privacy` is a one-band route —
+`main > section` and `section` each resolve to exactly one outer band — so no candidate wins
+and the capture holds only the header and footer. No selector can fix this: the page really
+does have one band. It is reported as an absence rather than a pass.
+
+Static substitute, stated as a sweep and not as the gate: every declared value in the
+`.legal*` rules in `app/sections.css` resolves to a Prompt 5 token
+(`--spacing-*`, `--text-sm`, `--text-xl`, `--font-weight-*`, `--lh-heading`,
+`--color-neutral-200`, `--color-neutral-900`, `--color-warning`), and
+`components/sections/PrivacyBody.tsx` declares no raw colour, size or inline style at all.
+
+## F-21 — one raw colour value survives outside the token file, deliberately
+
+`app/sections.css:104` — `box-shadow: 0px 30px 60px 0px rgba(0, 0, 0, 0)`. Fully
+transparent: it carries **no hue**, and it exists to hold the reference's shadow *geometry*
+(offset, blur, spread), which A-8 explicitly keeps while excluding shadow colour. It is the
+only hex/rgb/hsl/oklch literal anywhere in `app/` or `components/` outside `app/globals.css`.
+Recorded so a later sweep does not read it as a palette leak.
+
+## F-22 — two acceptance-gate defects found and fixed this turn (not ITERATION_CAP work)
+
+Both are failures of our own build against a written contract, not divergences from the
+reference, so A-13's logic applies: fix them.
+
+1. **No `robots.txt` and no `sitemap.xml` existed.** Gate 13 found both returning 404.
+   Added `app/robots.ts` and `app/sitemap.ts`; the sitemap is generated from
+   `lib/business.ts` `routes`, the same five-entry list the header and footer render, so a
+   sitemap entry cannot drift from a real route and a sixth route cannot appear here without
+   appearing in the nav first.
+2. **No custom 404.** `/nope-404` served Next's default `404: This page could not be found.`
+   outside the shell. Added `app/not-found.tsx`, which renders inside the root layout — so
+   header, footer and call bar are the same shell every route uses — built from the existing
+   `.statement` / `.u-btn` / `.actions` primitives, no new token and no raw colour.
+   It is NOVEL and has no reference counterpart; it is `noindex, follow`.
+
+## F-23 — the map bypass was specified and had never been built
+
+`docs/behavior/07-map-lazy-mount.md` requires "a skip link immediately before the iframe
+that jumps past it, because an embedded map is a keyboard trap in some browsers once focus
+enters it." `<BusinessMap>` had the lazy load, the title, the aspect wrapper and the
+directions link — and no bypass. Gate 8, verifying the keyboard path **against the specs
+rather than against itself**, is what caught it.
+
+Fixed in the lead-owned shell: a `.u-skip` bypass link before the frame targeting a
+`tabIndex={-1}` anchor on the address block, with a per-instance `id` prop so the home map
+(`home-map`) and the contact map (`contact-map`) have distinct targets. `contrast.mjs` went
+from 1031 to 1037 scored pairs — the six new links, all passing — and `rendertruth.mjs`
+stayed at 0 findings, because visually-hidden skip links are now excluded from
+`cta-primacy`.
+
+This is the value of spec-verification even without the hand-tested pass: the gap was in the
+gap between two documents, which is exactly where a programmatic gate cannot look.
+
+## F-24 — the harness changed after the build wave; the earlier numbers were superseded, not carried forward
+
+Three instrument changes landed between the build wave and this turn, and **every number in
+this report is from a re-run, not quoted from `docs/shell-status.md`**:
+
+- `dominantPair()` in `rendertruth.mjs` only compared the 12 most frequent tone buckets, so a
+  gradient's dozens of buckets could push a small heading's glyph core out of the window.
+  It now considers every tone above a pixel-share floor. **F-16b's diagnosis stands and its
+  fix stands**: that finding was geometry (ink-to-box ratio at 768), not colour, and the
+  repair was type size, never recolouring.
+- `cta-primacy` was rewritten twice more and **no longer ranks by painted contrast at all**.
+  It now measures **chroma dominance**: no other action may be more saturated than the call
+  CTA. F-16a's ghost-button fix was correct under the old rule and remains correct design;
+  the check itself was wrong three times over — unsatisfiable, then vacuous, then beaten by
+  bordered nav links at 21:1.
+- A visually-hidden skip link was being scored as a competing action and is now excluded.
+
+## F-25 — fonts: there is NO font-substitution floor on this site
+
+Restated at the end of the chain because it is the floor most likely to be invented later.
+
+**Mulish and Inter are real, loaded, SIL OFL faces**, imported directly through
+`next/font/google` (4 loaded weights each in the Prompt 1 capture). D-11 does not fire.
+**A heading that will not converge here is a real bug, not an excused one** — and there is
+nothing to converge against anyway under F-19, which makes an invented font floor doubly
+worthless.
+
+**Outfit is a phantom**: 27 `@font-face` rules declared on the reference, **0 loaded**, and
+it appears in no computed `font-family` on any node at any breakpoint. It is dead plugin
+CSS. **It is never imported and a floor must never be booked for it.** Booking one would
+permanently excuse nothing while looking like diligence — the exact mistake another site in
+this programme shipped.
+
+Only the two icon fonts are genuinely replaced (`elementskit` / `ElegantIcons` →
+`lucide-react`): **glyph shape is a floor, box and stroke weight are not.**
+
+## F-26 — colour, restated and closed (A-8)
+
+**Colour divergence from the reference is intentional and is permanently excluded from every
+diff, every threshold and every future iteration.** Seed **79039**, violet-slate `#41434b` +
+deep rust `#672b22`, applied at token-write time; the site was built in its final palette
+from the first component onward. Stripped from the structural comparator: resolved colour,
+background-colour, border-colour, gradient stops, shadow colour. Retained: every geometric
+and typographic field, and the non-colour parts of borders and shadows.
+
+Winning seed **79039**; all five candidate seeds **79039, 26330, 644461, 267192, 70262**;
+master seed **7104**. The full derivation, the ramp role mapping and the 28 in-use AA pairs
+are in the "Palette seeds" section above and are unchanged.
+
+## F-27 — F-12 / F-17: the near-white placeholder fills, and the five unapplied backgrounds
+
+Seven of the eighteen REPLACE slots carry a `section-average` dominant colour rather than a
+`slot-crop`: the Prompt 1 probe ran before the image decoded and the fill fell back to the
+average of a mostly-white band, so those placeholders are near-white (**F-12**).
+
+Five of them are background slots — `about.page-hero.bg`, `services.page-hero.bg`,
+`contact.page-hero.bg`, `home.why-choose.bg`, `home.cta-band.bg` — and are **deliberately
+not applied** (**F-17**). A near-white background image beneath body text makes the band's
+painted contrast **UNMEASURABLE**: `contrast.mjs` reports a `url()` background as
+unmeasurable by design rather than assuming white, and `rendertruth.mjs` would then be
+scoring text against a tone nobody chose. The bands render on their real token surfaces
+instead.
+
+`docs/asset-prompts.md` section 3 writes all five prompts with an explicit luminance
+constraint — dark or high-contrast enough to carry body text — and requires each to be
+**re-gated individually at drop-in**, never as a batch. `about.values.img` is also written
+but not mounted: its reference slot is a single image beside a four-card row and dropping it
+into a four-up grid would fight the card heights.
+
+## Final gate results — merged Prompt 10 + 11, all re-run this turn
+
+Server: `pnpm build` + `pnpm start` on port 3104, never `next dev`. Port holder killed and
+the server restarted after every rebuild; page title and referenced stylesheet (HTTP 200)
+verified before each gate run.
+
+| gate | command | result |
+|---|---|---|
+| build | `pnpm build` | **clean** — 8 static routes, 0 type errors, 0 lint errors |
+| console errors | `capture.mjs --side ours` | **0 errors on all 15 route × breakpoint passes** |
+| contrast (declared CSS, gradient-aware AA) | `contrast.mjs` | **1037 scored, 0 FAIL, 0 UNMEASURABLE** |
+| render-truth (painted, CTA chroma primacy, tap targets) | `rendertruth.mjs` | **0 findings** |
+| NOVEL token conformance | `scripts/token-conformance.mjs` | **0 violations, 4/5 sections scored** — `privacy-body` UNSEGMENTED (F-20) |
+| structural deviation vs reference | `diff.mjs` | **BLOCKED/no-reference — 15/15 passes, 0 rows (F-19)** |
+| email sweep | `rg` per CLAUDE.md | **EMAIL SWEEP CLEAN** |
+| locations sweep | `rg -ni "locations\|areaServed\|cities\|neighborhood"` | 2 hits, both comments recording the *absence*; the footer `SERVICE_AREA` sentence is the only survivor |
+| NAP consistency | source trace | every phone / address / hours string resolves to `content/copy.ts` `site` via `lib/business.ts` |
+| hours | rendered + JSON-LD | `07:00`–`19:00`, all seven days, one block |
+| maps | rendered HTML | home `z=13`, contact `z=15`, both keyless-by-coordinate, `loading="lazy"`, titled, aspect-wrapped, directions link resolves |
+| internal link crawl | curl over all hrefs | 5 routes 200, `robots.txt` 200, `sitemap.xml` 200, custom 404 in the shell, 0 orphans, 0 dead anchors |
+| keyboard path | verified against `docs/behavior/` | skip link, drawer trap + Escape + focus restore, accordion `aria-expanded`/`aria-controls`, form focus-first-invalid + `aria-invalid` + `aria-live`, map bypass (added, F-23) |
+| reduced motion | source | `prefers-reduced-motion` honoured in `globals.css`, `shell.css` (x2) and `sections.css` (x3) |
+| palette conformance | `rg` for raw colour | 1 literal outside the token file, fully transparent (F-21) |
+| copy similarity | `similarity.mjs` | 42 sections · 5-gram **42/42** · trigram **42/42** · length **22/22 measured**, 11 rows **EXEMPT** |
+| metadata / canonical / robots / sitemap | rendered | all five routes carry a unique title, description and canonical; the sitemap lists exactly the five |
+| `TODO(fact)` count | `rg` + register | **15 open facts** (FACT-01…FACT-15), **12 inline `TODO(fact):` markers** across 5 files. Counted, never removed. |
+| Lighthouse | — | **DROPPED (A-4)** — pre-public blocker, "performance never measured" |
+| hand-tested keyboard pass | — | **DROPPED (A-4)** — pre-public blocker, "keyboard access is spec-verified only, never hand-tested" |
+
+Two numbers that must be read carefully rather than skimmed: `diff.mjs` **0 rows** is fifteen
+BLOCKED passes, not fifteen clean ones; and the similarity length gate's 11 exempt rows are
+**EXEMPT**, which is not a pass — each names a contractual reason the +/-10% rule cannot
+apply (the header's 19-link nav under D-01/D-02, the footer's deleted email address and
+licence number under D-03/D-14, and the contact map's zero-character reference denominator).
