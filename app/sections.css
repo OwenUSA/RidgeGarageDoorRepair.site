@@ -51,12 +51,16 @@
 .sec-head + .grid,
 .sec-head + .split,
 .sec-head + .stack,
+.sec-head + .featurerow,
+.sec-head + .commit,
 .sec-head + .acc { margin-top: var(--spacing-10); }
 @media (min-width: 1025px) {
   .sec-head + .sec-body,
   .sec-head + .grid,
   .sec-head + .split,
   .sec-head + .stack,
+  .sec-head + .featurerow,
+  .sec-head + .commit,
   .sec-head + .acc { margin-top: var(--spacing-12); }
 }
 
@@ -473,3 +477,289 @@ a.card:active { transform: translate3d(0, -1px, 0); transition-duration: 0.08s; 
 .mapsec__grid { display: grid; gap: var(--spacing-10); align-items: start; }
 @media (min-width: 1025px) { .mapsec__grid { grid-template-columns: 1fr 1.15fr; gap: var(--spacing-12); } }
 .mapsec__copy { max-width: 60ch; display: grid; gap: var(--spacing-4); }
+
+/* ==========================================================================
+   REFERENCE-ALIGNMENT PRIMITIVES
+   Added so the home route reads as the same page family as the reference
+   capture: a bleed hero with an icon-card trio under it, alternating
+   feature rows, centred card grids, a dark photographic "why us" band, and
+   the commitment split. Geometry and type still resolve to Prompt 5 tokens
+   only - COLOUR IS UNTOUCHED (A-7/A-8), the maroon ramp stands.
+   ========================================================================== */
+
+/* ------------------------- hero: art bleeds right ----------------------- */
+/* The reference hero art runs off the right edge of the viewport rather than
+   stopping at the container. The container keeps its own left gutter, so the
+   copy column is still on the site grid; only the art escapes. */
+
+.hero--bleed { padding-block: 0; overflow: hidden; }
+.hero--bleed .hero__grid { gap: 0; align-items: stretch; }
+@media (min-width: 1025px) {
+  .hero--bleed .hero__grid { grid-template-columns: 1fr 1fr; }
+}
+.hero--bleed .hero__copy {
+  padding-block: var(--spacing-12) var(--spacing-16);
+  align-self: center;
+}
+@media (min-width: 1025px) {
+  .hero--bleed .hero__copy { padding-block: var(--spacing-20); padding-inline-end: var(--spacing-12); }
+}
+@media (min-width: 1025px) {
+  .hero--bleed .hero__art {
+    display: block;
+    justify-self: stretch;
+    /* `width: 100%` from the base rule pins the box to the grid area and cancels
+       the stretch, so the negative end margin has nothing to grow into. */
+    width: auto;
+    max-width: none;
+    /* escape the container's right gutter and the page's own centring margin */
+    margin-inline-end: calc(50% - 50vw);
+    align-self: stretch;
+    /* The art is taken out of flow inside its own column so the band height is
+       set by the copy, not by the placeholder's intrinsic 577x607. Without this
+       a stretched 1020px-wide box would be 1073px tall and drive the hero. */
+    position: relative;
+    min-height: 560px;
+  }
+  .hero--bleed .hero__art img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+.hero--bleed .actions { margin-top: var(--spacing-10); }
+
+/* ----------------------- icon-card trio under hero ---------------------- */
+/* Reference band: three white cards, centred line icon, centred title,
+   centred body, lifted off the band by the card shadow. */
+
+.card--center { text-align: center; box-shadow: var(--shadow-soft); }
+.card--center .card__title { margin-top: var(--spacing-2); }
+.card__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin-inline: auto;
+  margin-bottom: var(--spacing-4);
+  color: var(--color-accent);
+}
+[data-surface="dark"] .card__icon,
+[data-surface="deep"] .card__icon { color: var(--color-surface); }
+
+/* A centred grid whose cards are equal height regardless of body length. */
+.grid--even { align-items: stretch; }
+.grid--even > .card { height: 100%; }
+
+/* ------------------------ wide centred section head --------------------- */
+/* The reference's services and materials intros run the full container width
+   and centre, rather than sitting in a 68ch measure. */
+
+.sec-head--wide { max-width: 92ch; }
+
+/* --------------------------- feature rows ------------------------------- */
+/* Reference "Residential ... / Commercial ..." pattern: heading, paragraph and
+   a call CTA in one column, the photograph in the other, alternating sides. */
+
+.featurerow { display: grid; gap: var(--spacing-8); align-items: center; }
+@media (min-width: 1025px) {
+  .featurerow { grid-template-columns: 1fr 1fr; gap: var(--spacing-12); }
+  .featurerow--flip > .featurerow__media { order: -1; }
+}
+.featurerow + .featurerow { margin-top: var(--spacing-16); }
+.featurerow__copy h3 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: var(--ls-h2);
+  line-height: var(--lh-tight);
+}
+@media (min-width: 1025px) { .featurerow__copy h3 { font-size: var(--text-5xl); } }
+.featurerow__copy p { margin-top: var(--spacing-6); }
+.featurerow__copy .taglist { margin-top: var(--spacing-6); }
+.featurerow__copy .actions { margin-top: var(--spacing-8); }
+.featurerow + .grid { margin-top: var(--spacing-16); }
+
+/* ----------------------- dark photographic band ------------------------- */
+/* Reference "Why homeowners choose ..." band: a full-bleed photograph with a
+   dark scrim, white type, and a 2x2 grid of hairline translucent cards. */
+
+.whyband { position: relative; isolation: isolate; }
+.whyband::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* The scrim is what makes white type legible over an arbitrary photograph.
+     It is a black wash, not a palette hue, so A-8 is not touched. */
+  background: rgba(0, 0, 0, 0.74);
+}
+.whyband .sec-head { max-width: 60ch; }
+.whyband__grid { margin-top: var(--spacing-12); }
+@media (min-width: 1025px) {
+  .whyband__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 60%; }
+}
+/* On this band the card is a hairline pane over the photograph, not a filled
+   surface - the [data-surface="deep"] .card fill would hide the image. */
+.whyband .card {
+  background: rgba(0, 0, 0, 0.28);
+  border-color: rgba(255, 255, 255, 0.28);
+  text-align: center;
+  color: var(--color-surface);
+}
+.whyband .card p { color: var(--color-surface); }
+
+/* -------------------------- commitment split ---------------------------- */
+/* Reference: a stack of white cards each led by a filled circular check on the
+   left, beside a copy column that ends in a photograph. */
+
+.commit { display: grid; gap: var(--spacing-10); align-items: center; }
+@media (min-width: 1025px) {
+  .commit { grid-template-columns: 1fr 1fr; gap: var(--spacing-12); }
+}
+.commit__cards { display: grid; gap: var(--spacing-6); }
+.commit__copy .media { margin-top: var(--spacing-8); }
+
+.iconcard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--spacing-4);
+  align-items: start;
+  padding: var(--spacing-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+@media (min-width: 1025px) { .iconcard { padding: var(--spacing-8); } }
+.iconcard__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+.iconcard__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-heading);
+  color: var(--color-primary-deep);
+}
+.iconcard__title + p { margin-top: var(--spacing-3); }
+/* The reference staggers the three panes; the inset is decorative and folds
+   away below the two-column breakpoint. */
+@media (min-width: 1025px) {
+  .commit__cards > .iconcard:nth-child(2) { margin-inline-start: var(--spacing-8); }
+  .commit__cards > .iconcard:nth-child(3) { margin-inline-start: var(--spacing-4); }
+}
+
+/* The step ordinal centres with its card when the card is centred. */
+.card__step--center { margin-inline: auto; }
+/* Tag pills centre inside a centred card. */
+.card--center .taglist { justify-content: center; }
+
+/* --------------------------- display headings --------------------------- */
+/* The h2 default in globals.css is the SMALL end of the extracted scale, which
+   is what the reference uses for a card title and for the legal body - not for
+   a band head. Every band head on the reference is set at the display end of
+   the same extracted ramp, extrabold, on the tight leading with the h2
+   tracking. Scoped to band heads so .legal h2 and .card__title are untouched;
+   every value is a Prompt 5 token. */
+
+.sec-head h2,
+.split h2,
+.commit__copy h2,
+.mapsec__copy h2 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-extrabold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-h2);
+}
+@media (min-width: 768px) {
+  .sec-head h2,
+  .split h2,
+  .commit__copy h2,
+  .mapsec__copy h2 { font-size: var(--text-5xl); }
+}
+@media (min-width: 1025px) {
+  .sec-head h2,
+  .split h2,
+  .commit__copy h2,
+  .mapsec__copy h2 { font-size: var(--text-6xl); }
+}
+
+/* A band head's supporting paragraph is body-scale on the reference, one step
+   up from the 16px baseline, and it is never as wide as the heading. */
+.sec-head > p { font-size: var(--text-lg); }
+.sec-head--center > p { margin-inline: auto; max-width: 78ch; }
+
+/* A band head followed directly by its own prose column (the about teaser and
+   the commitment copy) needs the same rhythm the .sec-head + .grid pairs get. */
+.sec-head + .prose { margin-top: var(--spacing-6); }
+.commit__copy h2 + p { margin-top: var(--spacing-6); }
+.commit__copy p { font-size: var(--text-lg); }
+
+/* ----------------------------- FAQ + rail ------------------------------- */
+/* The reference sets the accordion in a wide column with a narrow contact rail
+   beside it, and paints the OPEN header in the brand fill with a minus, the
+   closed ones on the alt fill with a plus. */
+
+.faqlayout { display: grid; gap: var(--spacing-10); align-items: start; }
+@media (min-width: 1025px) {
+  .faqlayout { grid-template-columns: 1.9fr 1fr; gap: var(--spacing-12); }
+}
+
+.faqside { display: grid; gap: var(--spacing-6); }
+.faqside__panel {
+  display: grid;
+  justify-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-8);
+  border-radius: var(--radius-xs);
+  background: var(--color-primary-deep);
+  color: var(--color-surface);
+  text-align: center;
+}
+.faqside__mark { color: var(--color-surface); }
+.faqside__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-heading);
+}
+.faqside__card {
+  display: grid;
+  justify-items: start;
+  gap: var(--spacing-4);
+  padding: var(--spacing-8);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  border-radius: var(--radius-xs);
+  background: var(--color-neutral-200);
+}
+.faqside__cardtitle {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-heading);
+  color: var(--color-primary-deep);
+}
+.faqside__card .u-muted { color: var(--color-neutral-900); }
+
+/* Closed rows sit on the alt fill; the open row takes the brand fill and paints
+   its own label white, which is the reference's own accordion treatment. */
+.acc__item { border-color: transparent; background: var(--color-neutral-200); }
+.acc__item:has(.acc__btn[aria-expanded="true"]) { background: var(--color-surface); }
+.acc__btn[aria-expanded="true"] {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+.acc__item:has(.acc__btn[aria-expanded="true"]) .acc__panel > div { background: var(--color-neutral-200); }
+.acc__btn svg { transition: none; }
+.acc__btn[aria-expanded="true"] svg { transform: none; }
+.acc__body { padding-top: var(--spacing-6); }

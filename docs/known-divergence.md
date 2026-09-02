@@ -622,3 +622,42 @@ BLOCKED passes, not fifteen clean ones; and the similarity length gate's 11 exem
 **EXEMPT**, which is not a pass — each names a contractual reason the +/-10% rule cannot
 apply (the header's 19-link nav under D-01/D-02, the footer's deleted email address and
 licence number under D-03/D-14, and the contact map's zero-character reference denominator).
+
+---
+
+## F-24 — layout re-alignment to the reference's band shapes
+
+Owner-requested pass, after a side-by-side read of the reference home page against ours.
+The finding was that the copy and the token set had converged but the **band shapes** had
+not: every band was a left-aligned head over a uniform card grid, where the reference
+alternates a bleed hero, an icon-card trio, split feature rows, a dark photographic band
+and a two-column FAQ.
+
+**Colour was explicitly held.** The owner chose "structure only" when asked, so the
+Prompt 5 seed-79039 ramp is untouched and A-7/A-8 stand: nothing below introduces a
+literal colour except the `whyband` scrim, which is a black wash at 74% and not a hue.
+
+| band | was | now |
+|---|---|---|
+| `home.hero` | contained 577px art column on the white surface | alt surface, art bleeds past the container's right gutter, `position: absolute` inside its own column so the placeholder's 577x607 no longer drives band height |
+| `home.transparency` | left head, plain cards on the alt fill | centred head, three centred lucide-icon cards on white |
+| `home.services-grid` | four cards in a 2-col grid, media inside two of them | centred head, the two media-bearing cards become alternating feature rows with their own call CTA, the rest fall through to a centred grid |
+| `home.process` | left head, left cards | centred head, centred cards on the alt fill |
+| `home.why-choose` | checklist on the alt fill | `band--art` over the `home.why-choose.bg` placeholder with a 74% scrim, `data-surface="deep"`, reasons as a 2x2 grid of hairline panes |
+| `home.commitment` | head, full-width image, card grid, trailing prose | two columns — a staggered stack of check-led panes beside the head, its closing paragraph and the photograph |
+| `home.performance-band` | media first | copy first, media right |
+| `services.faq` | full-width accordion, chevron | 1.9fr/1fr split with a contact rail; open row takes the brand fill and a minus, closed rows the alt fill and a plus |
+| `shell.footer` | brand / NAP / unlabelled nav | brand / headed Quick Links / headed Get in touch, centred copyright |
+
+Band heads also moved off the h2 default. The extracted h2 (18px / 24px at 1025) is the
+reference's **card-title and legal-body** size, not its band-head size; every band head on
+the reference is set at the display end of the same extracted ramp. `.sec-head h2` and its
+siblings now resolve to `--text-4xl/5xl/6xl` extrabold on `--lh-tight`. `.legal h2` and
+`.card__title` are deliberately outside that selector list and are unchanged.
+
+Four new copy strings, all in NOVEL or length-exempt sections so no measured length moved:
+`shell.footer.subheading` ("Quick Links", exempt) and `services.faq.subheading` + two
+`ctas` (NOVEL, no paired slot). Re-run after the change: **similarity 42/42 · 42/42 ·
+22/22 measured**, **contrast 1170 scored, 0 FAIL**. The 18 new UNMEASURABLE contrast rows
+are the `whyband` type over a `background-image`, which the static sampler cannot resolve —
+the same category the reference's own dark band falls into.

@@ -348,6 +348,7 @@ export const copy: Copy = {
           refSection: 's17-footer',
           cls: 'ADAPTED',
           heading: 'Get in touch',
+          subheading: 'Quick Links',
           items: ['Home', 'About', 'Services', 'Contact', 'Privacy'],
           body: [site.name, site.address, site.phone, site.hours, site.serviceArea],
           note: 'LENGTH EXEMPT — see harness.config.mjs lengthExempt',
@@ -434,6 +435,7 @@ export const copy: Copy = {
           refSection: 's05-footer',
           cls: 'ADAPTED',
           heading: 'Get in touch',
+          subheading: 'Quick Links',
           items: ['Home', 'About', 'Services', 'Contact', 'Privacy'],
           body: [site.name, site.address, site.phone, site.hours, site.serviceArea],
           note: 'LENGTH EXEMPT — see harness.config.mjs lengthExempt',
@@ -547,6 +549,11 @@ export const copy: Copy = {
               body: 'Start with the remote battery, then try re-pairing it to the head unit. If a second remote also fails while the wall control works, the receiver in the opener is the likely fault rather than the remotes themselves.',
             },
           ],
+          // The aside beside the accordion. NOVEL section, so there is no paired slot
+          // and no length gate; both strings are kept short deliberately so neither can
+          // carry a 5-gram against the reference corpus.
+          subheading: 'Not answered here?',
+          ctas: [`Call ${site.phone}`, 'Ask us your question', 'Open the contact form'],
         },
         {
           id: 'services.cta-band',
@@ -564,6 +571,7 @@ export const copy: Copy = {
           refSection: 's04-footer',
           cls: 'ADAPTED',
           heading: 'Get in touch',
+          subheading: 'Quick Links',
           items: ['Home', 'About', 'Services', 'Contact', 'Privacy'],
           body: [site.name, site.address, site.phone, site.hours, site.serviceArea],
           note: 'LENGTH EXEMPT — see harness.config.mjs lengthExempt',
@@ -629,6 +637,7 @@ export const copy: Copy = {
           refSection: 's04-footer',
           cls: 'ADAPTED',
           heading: 'Get in touch',
+          subheading: 'Quick Links',
           items: ['Home', 'About', 'Services', 'Contact', 'Privacy'],
           body: [site.name, site.address, site.phone, site.hours, site.serviceArea],
           note: 'LENGTH EXEMPT — see harness.config.mjs lengthExempt',
@@ -721,6 +730,7 @@ export const copy: Copy = {
           refSection: 's02-footer',
           cls: 'ADAPTED',
           heading: 'Get in touch',
+          subheading: 'Quick Links',
           items: ['Home', 'About', 'Services', 'Contact', 'Privacy'],
           body: [site.name, site.address, site.phone, site.hours, site.serviceArea],
           note: 'LENGTH EXEMPT — see harness.config.mjs lengthExempt',

@@ -12,17 +12,17 @@ export default function HomeProcess() {
   const s = getSection('/', 'home.process');
 
   return (
-    <section className="band" data-section={dataSection(s.id)}>
+    <section className="band" data-section={dataSection(s.id)} data-surface="alt">
       <div className="u-container">
-        <div className="sec-head">
+        <div className="sec-head sec-head--center sec-head--wide">
           <h2>{s.heading}</h2>
           <p>{s.body?.[0]}</p>
         </div>
 
-        <div className="grid grid--4">
+        <div className="grid grid--4 grid--even">
           {s.cards?.map((card, i) => (
-            <div className="card" key={card.heading}>
-              <span className="card__step" aria-hidden="true">
+            <div className="card card--center" key={card.heading}>
+              <span className="card__step card__step--center" aria-hidden="true">
                 {i + 1}
               </span>
               <h3 className="card__title">{card.heading}</h3>

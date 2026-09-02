@@ -19,7 +19,7 @@ export default function HomeTrustStrip() {
   const s = getSection('/', 'home.trust-strip');
 
   return (
-    <section className="band band--tight" data-surface="alt" data-section={dataSection(s.id)}>
+    <section className="band band--tight" data-section={dataSection(s.id)}>
       <div className="u-container">
         <div className="grid grid--3">
           {s.cards?.map((card, i) => {

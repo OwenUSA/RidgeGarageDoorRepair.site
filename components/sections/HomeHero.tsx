@@ -28,7 +28,7 @@ export default function HomeHero() {
   const s = getSection('/', 'home.hero');
 
   return (
-    <section className="hero" data-section={dataSection(s.id)}>
+    <section className="hero hero--bleed" data-section={dataSection(s.id)} data-surface="alt">
       <div className="u-container hero__grid">
         <div className="hero__copy">
           <p className="u-eyebrow">{s.eyebrow}</p>
@@ -56,6 +56,7 @@ export default function HomeHero() {
             alt=""
             width={577}
             height={607}
+            className="hero__img"
             decoding="async"
             fetchPriority="high"
           />

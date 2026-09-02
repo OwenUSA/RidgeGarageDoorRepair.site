@@ -16,7 +16,9 @@
 // No scrollHeight measurement, no max-height, no ResizeObserver - the CSS handles it.
 
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { MessageCircleQuestion, Minus, Phone, Plus } from 'lucide-react';
+import { business } from '@/lib/business';
 import { dataSection, getSection } from '@/lib/sections';
 
 export default function ServicesFaq() {
@@ -34,13 +36,14 @@ export default function ServicesFaq() {
 
   return (
     <section className="band" data-section={dataSection(s.id)}>
-      <div className="u-container">
-        <div className="sec-head">
-          <h2>{s.heading}</h2>
-          <p className="u-muted">{s.body?.[0]}</p>
-        </div>
+      <div className="u-container faqlayout">
+        <div>
+          <div className="sec-head">
+            <h2>{s.heading}</h2>
+            <p className="u-muted">{s.body?.[0]}</p>
+          </div>
 
-        <div className="acc">
+          <div className="acc">
           {s.cards?.map((card, i) => {
             const isOpen = open.has(i);
             const panelId = `services-faq-panel-${i}`;
@@ -57,7 +60,11 @@ export default function ServicesFaq() {
                     onClick={() => toggle(i)}
                   >
                     {card.heading}
-                    <ChevronDown size={20} strokeWidth={2.5} aria-hidden="true" />
+                    {isOpen ? (
+                      <Minus size={20} strokeWidth={2.5} aria-hidden="true" />
+                    ) : (
+                      <Plus size={20} strokeWidth={2.5} aria-hidden="true" />
+                    )}
                   </button>
                 </h3>
                 <div
@@ -73,7 +80,31 @@ export default function ServicesFaq() {
               </div>
             );
           })}
+          </div>
         </div>
+
+        {/* The reference parks a contact rail beside the accordion rather than sending
+            the reader to the foot of the page for the same two actions. */}
+        <aside className="faqside">
+          <div className="faqside__panel">
+            <span className="faqside__mark">
+              <MessageCircleQuestion size={32} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <p className="faqside__title">{s.subheading}</p>
+            <a className="u-btn u-btn--call" href={business.phone.href}>
+              <Phone size={18} strokeWidth={2.5} aria-hidden="true" />
+              {s.ctas?.[0]}
+            </a>
+          </div>
+
+          <div className="faqside__card">
+            <p className="faqside__cardtitle">{s.ctas?.[1]}</p>
+            <p className="u-muted">{business.serviceArea}</p>
+            <Link className="u-btn u-btn--ghost" href="/contact">
+              {s.ctas?.[2]}
+            </Link>
+          </div>
+        </aside>
       </div>
     </section>
   );

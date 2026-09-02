@@ -19,28 +19,32 @@ const MEDIA: Record<number, { src: string; w: number; h: number }> = {
 
 export default function HomeServicesGrid() {
   const s = getSection('/', 'home.services-grid');
+  const cards = s.cards ?? [];
+  // The two cards that own a reference media slot become alternating feature rows -
+  // copy one side, photograph the other, flipped on the second - which is the shape the
+  // reference uses for its two service families. The remainder fall through to a centred
+  // card grid underneath, matching the sub-service tiles below each of those rows.
+  const rows = cards.filter((_, i) => MEDIA[i]);
+  const tiles = cards.filter((_, i) => !MEDIA[i]);
 
   return (
     <section className="band" data-section={dataSection(s.id)}>
       <div className="u-container">
-        <div className="sec-head">
+        <div className="sec-head sec-head--center sec-head--wide">
           <h2>{s.heading}</h2>
-          <p>{s.body?.[0]}</p>
+          <p className="u-muted">{s.body?.[0]}</p>
         </div>
 
-        <div className="grid grid--2">
-          {s.cards?.map((card, i) => {
-            const media = MEDIA[i];
-            return (
-              <div className="card" key={card.heading}>
-                {media ? (
-                  <div className="media" style={{ aspectRatio: `${media.w} / ${media.h}` }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={media.src} alt="" width={media.w} height={media.h} decoding="async" />
-                  </div>
-                ) : null}
-                <h3 className="card__title">{card.heading}</h3>
-                <p>{card.body}</p>
+        {rows.map((card, i) => {
+          const media = MEDIA[i];
+          return (
+            <div
+              className={`featurerow${i % 2 === 1 ? ' featurerow--flip' : ''}`}
+              key={card.heading}
+            >
+              <div className="featurerow__copy">
+                <h3>{card.heading}</h3>
+                <p className="u-muted">{card.body}</p>
                 {card.items ? (
                   <ul className="taglist">
                     {card.items.map((item) => (
@@ -48,12 +52,41 @@ export default function HomeServicesGrid() {
                     ))}
                   </ul>
                 ) : null}
+                <div className="actions">
+                  <a className="u-btn u-btn--call" href={business.phone.href}>
+                    <Phone size={18} strokeWidth={2.5} aria-hidden="true" />
+                    {s.ctas?.[0]}
+                  </a>
+                </div>
               </div>
-            );
-          })}
+
+              <div className="featurerow__media">
+                <div className="media" style={{ aspectRatio: `${media.w} / ${media.h}` }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={media.src} alt="" width={media.w} height={media.h} decoding="async" />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="grid grid--2 grid--even">
+          {tiles.map((card) => (
+            <div className="card card--center" key={card.heading}>
+              <h3 className="card__title">{card.heading}</h3>
+              <p className="u-muted">{card.body}</p>
+              {card.items ? (
+                <ul className="taglist" style={{ justifyContent: 'center' }}>
+                  {card.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ))}
         </div>
 
-        <div className="actions">
+        <div className="actions actions--center">
           <a className="u-btn u-btn--call" href={business.phone.href}>
             <Phone size={18} strokeWidth={2.5} aria-hidden="true" />
             {s.ctas?.[0]}

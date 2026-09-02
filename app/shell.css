@@ -191,7 +191,7 @@
   gap: var(--spacing-10);
 }
 @media (min-width: 768px) {
-  .site-footer__grid { grid-template-columns: 2fr 1.2fr 1fr; gap: var(--spacing-12); }
+  .site-footer__grid { grid-template-columns: 2fr 1fr 1.3fr; gap: var(--spacing-12); }
 }
 .site-footer__name {
   font-family: var(--font-display);
@@ -206,6 +206,16 @@
 .site-footer__nap { font-style: normal; display: grid; gap: var(--spacing-3); }
 .site-footer__nap p { display: flex; align-items: flex-start; gap: var(--spacing-3); }
 .site-footer__nap svg { flex: none; margin-top: 4px; }
+/* A footer column heading. Same display face and weight as the reference's, one
+   step above the link scale so the column reads as a group rather than a run. */
+.site-footer__colhead {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-heading);
+  color: var(--color-surface);
+  margin-bottom: var(--spacing-6);
+}
 .site-footer__nav ul { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--spacing-2); }
 .site-footer__nav a {
   display: inline-flex;
@@ -221,6 +231,7 @@
   padding-top: var(--spacing-6);
   border-top: 1px solid var(--color-neutral-600);
   font-size: var(--text-sm);
+  text-align: center;
 }
 
 /* ---- mobile sticky call bar (docs/behavior/03) ---- */

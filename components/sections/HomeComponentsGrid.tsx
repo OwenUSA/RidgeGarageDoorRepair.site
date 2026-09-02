@@ -17,12 +17,12 @@ export default function HomeComponentsGrid() {
   return (
     <section className="band" data-section={dataSection(s.id)}>
       <div className="u-container">
-        <div className="sec-head">
+        <div className="sec-head sec-head--center sec-head--wide">
           <h2>{s.heading}</h2>
           <p className="u-muted">{s.body?.[0]}</p>
         </div>
 
-        <div className="grid grid--3">
+        <div className="grid grid--3 grid--even">
           {s.cards?.map((card, i) => (
             <div className="card" key={card.heading}>
               <div className="media" style={{ aspectRatio: '387 / 260' }}>

@@ -17,7 +17,13 @@ export default function HomePerformanceBand() {
 
   return (
     <section className="band" data-section={dataSection(s.id)}>
-      <div className="u-container split split--media-first">
+      <div className="u-container split">
+
+        <div className="statement">
+          <h2>{s.heading}</h2>
+          <p>{s.body?.[0]}</p>
+        </div>
+
         <div className="split__media">
           <div className="media" style={{ aspectRatio: '620 / 550' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,11 +35,6 @@ export default function HomePerformanceBand() {
               decoding="async"
             />
           </div>
-        </div>
-
-        <div className="statement">
-          <h2>{s.heading}</h2>
-          <p>{s.body?.[0]}</p>
         </div>
       </div>
     </section>

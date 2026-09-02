@@ -15,7 +15,7 @@ export default function HomeTestimonialsHead() {
   return (
     <section className="band" data-section={dataSection(s.id)}>
       <div className="u-container">
-        <div className="sec-head sec-head--center">
+        <div className="sec-head sec-head--center sec-head--wide">
           <h2>{s.heading}</h2>
           <p className="sec-head__sub">{s.subheading}</p>
           <p className="u-muted">{s.body?.[0]}</p>

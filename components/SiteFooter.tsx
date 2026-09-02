@@ -13,8 +13,16 @@
 import Link from 'next/link';
 import { Clock, MapPin, Phone } from 'lucide-react';
 import { business, routes } from '@/lib/business';
+import { getSection } from '@/lib/sections';
 
 export default function SiteFooter() {
+  // Column headings and the base rule come from the reference's own footer shape: a brand
+  // column, a headed link column, a headed contact column, then a hairline and a centred
+  // copyright. Their Services column and their city column are D-02/D-01 casualties, so
+  // this is three columns rather than four - the exemption already declared for
+  // '*::shell.footer' in harness.config.mjs.
+  const f = getSection('/', 'shell.footer');
+
   return (
     <footer className="site-footer" data-shell="footer" data-section="shell-footer" data-surface="deep">
       <div className="u-container site-footer__grid">
@@ -25,7 +33,19 @@ export default function SiteFooter() {
           <p className="u-muted site-footer__area">{business.serviceArea}</p>
         </div>
 
+        <nav className="site-footer__nav" aria-label="Footer">
+          <p className="site-footer__colhead">{f.subheading}</p>
+          <ul>
+            {routes.map((r) => (
+              <li key={r.href}>
+                <Link href={r.href}>{r.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         <address className="site-footer__nap">
+          <p className="site-footer__colhead">{f.heading}</p>
           <p>
             <MapPin size={16} strokeWidth={2} aria-hidden="true" />
             <span>
@@ -43,16 +63,6 @@ export default function SiteFooter() {
             <span>{business.hours.display}</span>
           </p>
         </address>
-
-        <nav className="site-footer__nav" aria-label="Footer">
-          <ul>
-            {routes.map((r) => (
-              <li key={r.href}>
-                <Link href={r.href}>{r.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </div>
 
       <div className="u-container site-footer__base">
