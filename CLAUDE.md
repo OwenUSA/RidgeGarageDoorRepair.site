@@ -447,8 +447,20 @@ about painted pixels:
   scores the **worst sample along the ramp**; reports `UNMEASURABLE` for `url()` or
   translucent overlays rather than assuming white.
 - **`rendertruth.mjs`** — pixel-level. Screenshots each text box and measures the contrast
-  between its dominant painted tones; checks that the `tel:` CTA leads the page on painted
-  contrast; enforces WCAG 2.5.8 tap targets at the smallest breakpoint.
+  between its dominant painted tones; enforces WCAG 2.5.8 tap targets at the smallest
+  breakpoint; and checks CTA salience as **chroma dominance** — no other action on the page
+  may be more saturated than the call CTA.
+
+  That last check was specified wrongly three times before it worked, and the history is
+  worth keeping because each version failed differently. Ranking the CTA by painted
+  contrast against all text is unsatisfiable (near-black copy on white is ~18:1 and no
+  brand colour beats it — one site washed out its headings trying, and the regression had
+  to be reverted). Ranking the best `tel:` element against all interactive elements is
+  vacuous (a plain footer phone number at ~21:1 tops it, so the real button never has to
+  win — Atlas's invisible CTA never fired this check once). Ranking among "buttons" fails
+  on bordered nav links at 21:1 beating a saturated fill at 7.4:1. Painted contrast is
+  simply not a proxy for visual prominence; chroma is. Legibility of the CTA is covered by
+  the text-legibility check, which is what actually caught Atlas.
 
 **Why these exist.** Atlas completed this entire chain and shipped with its primary call
 CTA invisible — label painted in *exactly* its own background colour, 1:1 — on all five
