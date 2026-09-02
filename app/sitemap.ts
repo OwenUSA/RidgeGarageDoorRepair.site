@@ -11,3 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: r.href === '/' ? 1 : 0.7,
   }));
 }
+
+// output: "export" cannot infer this metadata route is static; say so explicitly.
+export const dynamic = "force-static";
