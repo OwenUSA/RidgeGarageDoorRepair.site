@@ -661,3 +661,33 @@ Four new copy strings, all in NOVEL or length-exempt sections so no measured len
 22/22 measured**, **contrast 1170 scored, 0 FAIL**. The 18 new UNMEASURABLE contrast rows
 are the `whyband` type over a `background-image`, which the static sampler cannot resolve —
 the same category the reference's own dark band falls into.
+
+---
+
+## CORRECTION (2026-09-02) — the reference was NOT permanently lost
+
+Earlier entries in this file state that the reference is bot-walled, that no local copy
+exists, and that structural comparison is therefore impossible forever. **That is wrong,
+and it was wrong when written.**
+
+The Prompt-1 harness captures survived in this repo's `.harness/` directory the entire
+time: **~114 reference PNGs and ~18 structural JSON files**, covering all five routes at
+all three breakpoints, full-page and per-section. They were captured before the wall went
+up and were never wired back in.
+
+`.harness/` is gitignored and had zero files tracked, so this irreplaceable data was one
+`git clean -xdf` away from being gone. A copy is now archived outside every git repo at
+`../_reference-archive/` — see its README.
+
+**What this changes:** visual comparison against the reference is possible again, using
+those screenshots. Run the shared harness's `sidebyside.mjs`, or open the captures directly.
+
+**What this does NOT change:** whether to backfill structural metric fields from these
+captures remains a judgment call, and this file already records it as considered and
+declined. Deriving a metric the original capture never measured is fabrication, not
+recovery. That decision stands on its own merits — it simply was not, as claimed, forced by
+the absence of data.
+
+**General lesson:** "no `reference/raw/` means permanently lost" is a false equation.
+`reference/raw/` is the convenient form of the reference, not the only one. Check
+`.harness/` before declaring a reference unrecoverable.
