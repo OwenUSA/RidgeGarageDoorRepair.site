@@ -29,7 +29,7 @@ export default function HomeAboutTeaser() {
           <div className="media" style={{ aspectRatio: '556 / 500' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/placeholders/home.about-teaser.img-556x500.svg"
+              src="/placeholders/home.about-teaser.img-556x500.jpg"
               alt=""
               width={556}
               height={500}

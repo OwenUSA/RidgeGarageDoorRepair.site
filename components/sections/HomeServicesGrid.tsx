@@ -13,8 +13,8 @@ import { business } from '@/lib/business';
 import { dataSection, getSection } from '@/lib/sections';
 
 const MEDIA: Record<number, { src: string; w: number; h: number }> = {
-  0: { src: '/placeholders/home.services-grid.img1-620x360.svg', w: 620, h: 360 },
-  1: { src: '/placeholders/home.services-grid.img2-600x360.svg', w: 600, h: 360 },
+  0: { src: '/placeholders/home.services-grid.img1-620x360.jpg', w: 620, h: 360 },
+  1: { src: '/placeholders/home.services-grid.img2-600x360.jpg', w: 600, h: 360 },
 };
 
 export default function HomeServicesGrid() {

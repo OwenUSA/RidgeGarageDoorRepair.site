@@ -28,7 +28,7 @@ export default function HomePerformanceBand() {
           <div className="media" style={{ aspectRatio: '620 / 550' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/placeholders/home.performance-band.img-620x550.svg"
+              src="/placeholders/home.performance-band.img-620x550.jpg"
               alt=""
               width={620}
               height={550}

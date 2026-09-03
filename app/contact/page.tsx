@@ -23,13 +23,13 @@ export const metadata: Metadata = {
     url: `${business.url}/contact`,
     siteName: business.name,
     type: 'website',
-    images: [{ url: '/placeholders/contact.page-hero.bg-1440x366.svg', width: 1440, height: 366, alt: `Contact ${business.name}` }],
+    images: [{ url: '/placeholders/contact.page-hero.bg-1440x366.jpg', width: 1440, height: 366, alt: `Contact ${business.name}` }],
   },
   twitter: {
     card: 'summary_large_image',
     title: meta.title,
     description: meta.description,
-    images: ['/placeholders/contact.page-hero.bg-1440x366.svg'],
+    images: ['/placeholders/contact.page-hero.bg-1440x366.jpg'],
   },
 };
 

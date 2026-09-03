@@ -19,7 +19,7 @@ export default function LocalBusinessJsonLd() {
     description: business.tagline,
     url: business.url,
     telephone: business.phone.display,
-    image: `${business.url}/placeholders/home.hero.art.svg`,
+    image: `${business.url}/placeholders/home.hero.art.jpg`,
     address: {
       '@type': 'PostalAddress',
       streetAddress: business.address.street,

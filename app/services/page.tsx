@@ -25,13 +25,13 @@ export const metadata: Metadata = {
     url: `${business.url}/services`,
     siteName: business.name,
     type: 'website',
-    images: [{ url: '/placeholders/services.page-hero.bg-1440x390.svg', width: 1440, height: 390, alt: `Garage door services offered by ${business.name}` }],
+    images: [{ url: '/placeholders/services.page-hero.bg-1440x390.jpg', width: 1440, height: 390, alt: `Garage door services offered by ${business.name}` }],
   },
   twitter: {
     card: 'summary_large_image',
     title: meta.title,
     description: meta.description,
-    images: ['/placeholders/services.page-hero.bg-1440x390.svg'],
+    images: ['/placeholders/services.page-hero.bg-1440x390.jpg'],
   },
 };
 

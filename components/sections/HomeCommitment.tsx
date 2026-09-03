@@ -43,7 +43,7 @@ export default function HomeCommitment() {
           <div className="media" style={{ aspectRatio: '566 / 370' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/placeholders/home.commitment.img-566x370.svg"
+              src="/placeholders/home.commitment.img-566x370.jpg"
               alt=""
               width={566}
               height={370}

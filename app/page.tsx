@@ -34,13 +34,13 @@ export const metadata: Metadata = {
     url: business.url,
     siteName: business.name,
     type: 'website',
-    images: [{ url: '/placeholders/home.hero.art.svg', width: 577, height: 607, alt: business.name }],
+    images: [{ url: '/placeholders/home.hero.art.jpg', width: 577, height: 607, alt: business.name }],
   },
   twitter: {
     card: 'summary_large_image',
     title: meta.title,
     description: meta.description,
-    images: ['/placeholders/home.hero.art.svg'],
+    images: ['/placeholders/home.hero.art.jpg'],
   },
 };
 

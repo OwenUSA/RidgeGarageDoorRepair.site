@@ -34,7 +34,7 @@ export default function AboutStory() {
             <div className="media" style={{ aspectRatio: '620 / 450' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/placeholders/about.story.img-620x450.svg"
+                src="/placeholders/about.story.img-620x450.jpg"
                 alt=""
                 width={620}
                 height={450}

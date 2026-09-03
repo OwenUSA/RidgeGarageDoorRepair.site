@@ -28,7 +28,7 @@ export default function HomeComponentsGrid() {
               <div className="media" style={{ aspectRatio: '387 / 260' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={`/placeholders/${s.id}.img${i + 1}-387x260.svg`}
+                  src={`/placeholders/${s.id}.img${i + 1}-387x260.jpg`}
                   alt=""
                   width={387}
                   height={260}

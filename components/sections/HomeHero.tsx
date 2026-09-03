@@ -52,7 +52,7 @@ export default function HomeHero() {
         <div className="hero__art">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/placeholders/home.hero.art.svg"
+            src="/placeholders/home.hero.art.jpg"
             alt=""
             width={577}
             height={607}

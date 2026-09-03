@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     url: `${business.url}/about`,
     siteName: business.name,
     type: 'website',
-    images: [{ url: '/placeholders/about.page-hero.bg-1440x438.svg', width: 1440, height: 438, alt: `${business.name} team` }],
+    images: [{ url: '/placeholders/about.page-hero.bg-1440x438.jpg', width: 1440, height: 438, alt: `${business.name} team` }],
   },
   twitter: {
     card: 'summary_large_image',
     title: meta.title,
     description: meta.description,
-    images: ['/placeholders/about.page-hero.bg-1440x438.svg'],
+    images: ['/placeholders/about.page-hero.bg-1440x438.jpg'],
   },
 };
 

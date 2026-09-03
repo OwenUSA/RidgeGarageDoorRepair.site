@@ -32,7 +32,7 @@ export default function HomeWhyChoose() {
       className="band band--art whyband"
       data-section={dataSection(s.id)}
       data-surface="deep"
-      style={{ backgroundImage: 'url(/placeholders/home.why-choose.bg-1440x1092.svg)' }}
+      style={{ backgroundImage: 'url(/placeholders/home.why-choose.bg-1440x1092.jpg)' }}
     >
       <div className="u-container">
         <div className="sec-head">
