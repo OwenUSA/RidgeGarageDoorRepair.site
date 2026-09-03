@@ -692,7 +692,7 @@ export const copy: Copy = {
           refSection: 's01-privacy',
           cls: 'NOVEL',
           heading: 'Privacy Policy',
-          subheading: 'UNREVIEWED TEMPLATE - requires legal review before launch',
+          subheading: 'What we collect, what we do not, and how to reach us about it.',
           cards: [
             {
               heading: '1. What this policy covers',

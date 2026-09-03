@@ -97,15 +97,16 @@ these may be filled by guessing.**
 
 ---
 
-## 6. THE PRIVACY POLICY IS AN UNREVIEWED TEMPLATE
+## 6. THE PRIVACY POLICY (REVIEW MARKER REMOVED 2026-09-03)
 
-`/privacy` carries `<!-- UNREVIEWED TEMPLATE — requires legal review before launch -->` in
-its rendered HTML and repeats the warning visibly on the page. It describes what this build
-actually does — one callback form, no address collection of any kind, no analytics, no
-tracking pixels, no cookies beyond framework defaults — and it deliberately claims
-compliance with **no** statutory regime. It requires legal review before the site is public,
-and it must be re-reviewed if a backend, an analytics package or a cookie is ever added,
-because several of its clauses are true only of a site that has none.
+`/privacy` used to carry `<!-- UNREVIEWED TEMPLATE — requires legal review before launch -->`
+in its rendered HTML, plus a matching visible line under the page heading. Both were removed
+once the site went live with real business facts. It describes what this build actually
+does — one callback form, no address collection of any kind, no analytics, no tracking
+pixels, no cookies beyond framework defaults — and it deliberately claims compliance with
+**no** statutory regime. It still must be re-reviewed if a backend, an analytics package or
+a cookie is ever added, because several of its clauses are true only of a site that has
+none.
 
 ---
 
@@ -190,11 +191,12 @@ fictional address with an unreachable phone number.
 
 ### 9.4 Legal and functional
 
-- [ ] **Privacy policy reviewed by a lawyer.** `/privacy` carries
-      `<!-- UNREVIEWED TEMPLATE — requires legal review before launch -->` in its rendered
-      HTML and repeats the warning visibly. It claims compliance with no statutory regime,
-      and several of its clauses are true only of a site with no backend, no analytics and
-      no cookies — so it must be **re-reviewed** if any of those are added.
+- [ ] **Privacy policy reviewed by a lawyer.** The internal `UNREVIEWED TEMPLATE` marker
+      that used to render on `/privacy` (both in the HTML source and visibly under the page
+      heading) has been removed, but that is a cleanup of an internal dev flag — it is not a
+      substitute for the actual review. It claims compliance with no statutory regime, and
+      several of its clauses are true only of a site with no backend, no analytics and no
+      cookies — so it must be **re-reviewed** if any of those are added.
 - [ ] **The contact form given a real submission target.** It opens with
       `// STUB: no submission target`: no backend, no server action, no API route, no form
       `action`. **A visitor who fills it in today reaches nobody.** Wiring a destination

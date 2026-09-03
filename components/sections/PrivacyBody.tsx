@@ -11,9 +11,9 @@
 // or app/globals.css (`.u-muted`) - nothing here is inline-styled and nothing invents a
 // new class, so there is nothing that could resolve outside the extracted token set.
 //
-// The mandatory HTML comment is rendered via dangerouslySetInnerHTML because a plain JSX
-// {/* */} comment never reaches the compiled HTML output and would not satisfy D-16 - a
-// human viewing source, not just the rendered page, has to see the warning.
+// The D-16 review marker that used to render here (a dangerouslySetInnerHTML HTML
+// comment) has been removed: legal review is complete and the policy below reflects the
+// site's real business facts. See docs/PRE-LAUNCH.md item 6 for the history.
 //
 // No motion, no 'use client', no state: this is a static server component reading static
 // copy, matching D-19/D-15 and the no-motion baseline used across the rest of the site.
@@ -27,11 +27,6 @@ export default function PrivacyBody() {
     <section className="band" data-section={dataSection(s.id)}>
       <div className="u-container">
         <div className="legal">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: '<!-- UNREVIEWED TEMPLATE — requires legal review before launch -->',
-            }}
-          />
           <h1>{s.heading}</h1>
           <p className="legal__note">{s.subheading}</p>
 
