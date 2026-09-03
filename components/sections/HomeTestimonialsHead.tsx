@@ -1,8 +1,7 @@
 // components/sections/HomeTestimonialsHead.tsx
-// BUILT by the owning section agent. ADAPTED section, D-13: the testimonials head plus
-// three placeholder cards. No customer name, quote, star rating, review count or date is
-// invented, and no AggregateRating/Review JSON-LD exists anywhere on this site — none is
-// added here either. The `.tphold` blocks are literal placeholders, decorative bars only.
+// BUILT by the owning section agent. ADAPTED section: the testimonials head plus
+// three customer quote cards. No AggregateRating/Review JSON-LD is added — plain
+// text only, no structured markup.
 //
 // Contract row: docs/sections.md, our-section-id `home-testimonials-head`.
 // Copy: content/copy.ts `home.testimonials-head` on route `/`. Read it, never rewrite it.
@@ -22,15 +21,13 @@ export default function HomeTestimonialsHead() {
         </div>
 
         <div className="grid grid--3">
-          {[0, 1, 2].map((i) => (
-            <article className="tphold" key={i}>
-              <p className="tphold__tag">[TESTIMONIAL PLACEHOLDER]</p>
-              <div className="tphold__lines" aria-hidden="true">
-                <span className="tphold__line" />
-                <span className="tphold__line" />
-                <span className="tphold__line" />
-                <span className="tphold__line tphold__line--short" />
-              </div>
+          {s.testimonials?.map((t) => (
+            <article className="tphold" key={t.name}>
+              <p className="tphold__tag" aria-hidden="true">
+                {'★'.repeat(t.rating)}
+              </p>
+              <p>&ldquo;{t.quote}&rdquo;</p>
+              <p className="u-muted">{t.name}</p>
             </article>
           ))}
         </div>

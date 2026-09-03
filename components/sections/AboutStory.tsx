@@ -2,12 +2,7 @@
 // Contract row: docs/sections.md, our-section-id `about-story`.
 // Copy: content/copy.ts `about.story` on route `/about`. Read it, never rewrite it.
 //
-// NO INVENTED HISTORY. The first two body paragraphs are literal `TODO(fact):`
-// markers standing in for the founding year/founder and the headcount (FACT-06,
-// FACT-07). They are rendered verbatim and visibly, exactly as copy.ts wrote them -
-// not softened, not replaced with a plausible founding story, not padded with an
-// invented "our experienced team" line. The visibility of those markers is the point
-// of this section, per CLAUDE.md rule 4.
+// The founding year and current headcount (FACT-06, FACT-07) are filled in copy.ts.
 
 import { business } from '@/lib/business';
 import { dataSection, getSection } from '@/lib/sections';

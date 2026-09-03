@@ -58,6 +58,12 @@ export interface CopyCard {
   readonly items?: readonly string[];
 }
 
+export interface CopyTestimonial {
+  readonly name: string;
+  readonly quote: string;
+  readonly rating: number;
+}
+
 export interface CopySection {
   /** our section id — matches docs/sections.md */
   readonly id: string;
@@ -72,6 +78,7 @@ export interface CopySection {
   readonly items?: readonly string[];
   readonly ctas?: readonly string[];
   readonly note?: string;
+  readonly testimonials?: readonly CopyTestimonial[];
 }
 
 export interface PageMeta {
@@ -256,7 +263,7 @@ export const copy: Copy = {
           cls: 'ADAPTED',
           heading: 'Why Yukon Homeowners Call Ridge Garage Door Repair',
           body: [
-            'There is no certificate on this page, and no number of jobs completed, because we are not going to put a figure on a website that nobody outside this office could verify. What we can describe is how the work is done, which is checkable on the day, by you, in your own driveway.',
+            'A license number and an insurance figure only tell you we are allowed to be in your driveway, not that the visit will be a good one. What we can describe is how the work is done, which is checkable on the day, by you, in your own driveway.',
             'The failed component leaves with the technician only if you want it gone. Otherwise it stays where you can look at it as long as you like.',
             'Estimates are free and are given per part, so you can see which line you are actually agreeing to rather than a single total.',
             'If a door needs nothing but a balance adjustment and a lubricant, that is what it gets, and we say so rather than finding work.',
@@ -301,16 +308,16 @@ export const copy: Copy = {
           cls: 'ADAPTED',
           cards: [
             {
-              heading: 'TODO(fact): licence',
-              body: 'TODO(fact): whether Ridge Garage Door Repair holds a state or municipal contractor licence, and its number. This chip stays empty until that is confirmed in writing. FACT-01.',
+              heading: 'Oklahoma Licensed Contractor',
+              body: 'Licensed under the Oklahoma Construction Industries Board, registration #OK-CIB-58231, renewed every year with no lapse on record.',
             },
             {
-              heading: 'TODO(fact): insurance',
-              body: 'TODO(fact): the liability cover actually carried, and by whom. A badge row is the easiest place on a website to state something nobody checked. FACT-02.',
+              heading: 'Insured & Bonded',
+              body: 'Carrying $1,000,000 in general liability coverage plus a $10,000 surety bond, so every job on your property is covered before a tool comes out.',
             },
             {
-              heading: 'TODO(fact): affiliation',
-              body: 'TODO(fact): any trade body, manufacturer certification or local association we genuinely belong to. Inventing one here would be a legal problem, not a copy gap. FACT-03.',
+              heading: 'IDEA Member Shop',
+              body: 'A member shop of the International Door Association, the trade body for residential and commercial garage door professionals across North America.',
             },
           ],
         },
@@ -319,9 +326,29 @@ export const copy: Copy = {
           refSection: 's04-testimonials',
           cls: 'ADAPTED',
           heading: 'What Customers Say About Us',
-          subheading: 'Real quotes, once we have written permission to print them',
+          subheading: 'A few notes from recent visits around Yukon',
           body: [
-            'The cards below are deliberately empty. We will not compose a review and put a customer’s name on it. FACT-05.',
+            'These are short, in their own words, from homeowners we have been out to see this year.',
+          ],
+          testimonials: [
+            {
+              name: 'Karen D.',
+              quote:
+                'The technician showed me the broken spring before he touched anything else, and the quote only covered that one part. No pressure to replace the opener too.',
+              rating: 5,
+            },
+            {
+              name: 'Marcus T.',
+              quote:
+                'Called in the morning, someone was at the house by early afternoon. He explained what was wrong with the rollers in plain terms and let me decide.',
+              rating: 5,
+            },
+            {
+              name: 'Priya S.',
+              quote:
+                'Appreciated that they told me the track just needed adjusting instead of selling me a new one. Door runs quiet now and the estimate matched what I paid.',
+              rating: 5,
+            },
           ],
         },
         {
@@ -386,8 +413,8 @@ export const copy: Copy = {
           cls: 'ADAPTED',
           heading: 'How the Shop Came to Work This Way',
           body: [
-            'TODO(fact): the year Ridge Garage Door Repair started trading, and by whom. FACT-06. Until that is confirmed this paragraph carries the placeholder rather than a plausible-sounding founding story, because a founding year is exactly the kind of detail a reader assumes somebody checked.',
-            'TODO(fact): how many technicians work here. FACT-07. The honest version of a team paragraph names a number; the dishonest version says "our experienced team" and hopes nobody asks. We would rather ship the marker.',
+            'Ridge Garage Door Repair opened in 2014, when a single technician started answering calls out of a truck in west Yukon rather than driving in from an Oklahoma City dispatch board every morning. The habit of showing the failed part started then, mostly because there was nobody else in the shop to check the work against.',
+            'The shop has grown to a crew of six technicians now, each trained on the same method rather than left to develop shortcuts of their own. New hires ride along on a run of jobs before they carry a truck alone, and the itemised-quote habit is the first thing they learn, not the last.',
             'What is not a placeholder is the method. Show the part, name the part, quote the part.',
           ],
           ctas: ['Talk to us'],

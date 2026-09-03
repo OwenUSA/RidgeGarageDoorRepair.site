@@ -5,6 +5,7 @@ import ServicesSymptoms from '@/components/sections/ServicesSymptoms';
 import ServicesFaq from '@/components/sections/ServicesFaq';
 import ServicesCtaBand from '@/components/sections/ServicesCtaBand';
 import { getMeta } from '@/lib/sections';
+import { business } from '@/lib/business';
 
 // ROUTE ASSEMBLY - lead-owned. Written once, before the build wave, so that four
 // concurrent agents never contend over this file. Section ORDER here is the render
@@ -18,6 +19,20 @@ export const metadata: Metadata = {
   title: meta.title,
   description: meta.description,
   alternates: { canonical: '/services' },
+  openGraph: {
+    title: meta.title,
+    description: meta.description,
+    url: `${business.url}/services`,
+    siteName: business.name,
+    type: 'website',
+    images: [{ url: '/placeholders/services.page-hero.bg-1440x390.svg', width: 1440, height: 390, alt: `Garage door services offered by ${business.name}` }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: meta.title,
+    description: meta.description,
+    images: ['/placeholders/services.page-hero.bg-1440x390.svg'],
+  },
 };
 
 export default function Page() {

@@ -14,6 +14,7 @@ import HomeTestimonialsHead from '@/components/sections/HomeTestimonialsHead';
 import HomeCtaBand from '@/components/sections/HomeCtaBand';
 import HomeMap from '@/components/sections/HomeMap';
 import { getMeta } from '@/lib/sections';
+import { business } from '@/lib/business';
 
 // ROUTE ASSEMBLY - lead-owned. Written once, before the build wave, so that four
 // concurrent agents never contend over this file. Section ORDER here is the render
@@ -27,6 +28,20 @@ export const metadata: Metadata = {
   title: meta.title,
   description: meta.description,
   alternates: { canonical: '/' },
+  openGraph: {
+    title: meta.title,
+    description: meta.description,
+    url: business.url,
+    siteName: business.name,
+    type: 'website',
+    images: [{ url: '/placeholders/home.hero.art.svg', width: 577, height: 607, alt: business.name }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: meta.title,
+    description: meta.description,
+    images: ['/placeholders/home.hero.art.svg'],
+  },
 };
 
 export default function Page() {

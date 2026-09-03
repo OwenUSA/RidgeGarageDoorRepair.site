@@ -32,6 +32,20 @@ export const metadata: Metadata = {
   description: copy.routes['/'].meta.description,
   robots: { index: true, follow: true },
   alternates: { canonical: '/' },
+  openGraph: {
+    title: copy.routes['/'].meta.title,
+    description: copy.routes['/'].meta.description,
+    url: business.url,
+    siteName: business.name,
+    type: 'website',
+    images: [{ url: '/placeholders/home.hero.art.svg', width: 577, height: 607, alt: business.name }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: copy.routes['/'].meta.title,
+    description: copy.routes['/'].meta.description,
+    images: ['/placeholders/home.hero.art.svg'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
